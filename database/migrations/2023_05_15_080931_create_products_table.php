@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->boolean('visibility')->default(true);
             $table->double('average_rating')->nullable();
             $table->integer('stock');
+            $table->json('images')->nullable();
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 

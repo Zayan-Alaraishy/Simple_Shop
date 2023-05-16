@@ -18,6 +18,11 @@ class Product extends Model
         'visibility',
         'average_rating',
         'stock',
+        'images'
+    ];
+
+    protected $casts = [
+        'images' => 'array',
     ];
 
     public function category()

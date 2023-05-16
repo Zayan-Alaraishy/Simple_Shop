@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +19,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/products', [ProductsController::class, 'index']);
-Route::resource('/products', ProductsController::class)->except('index')->middleware(['auth', 'verified']);
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified']);

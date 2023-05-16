@@ -26,6 +26,7 @@ class ProductFactory extends Factory
             'visibility' => $this->faker->boolean(),
             'average_rating' => null,
             'stock' => $this->faker->numberBetween(0, 100),
+            'images' => [],
         ];
     }
 }
