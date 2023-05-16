@@ -25,10 +25,10 @@ class AuthServices implements AuthServiceInterface
     }
 
 
-    public function login($login, $password)
+    public function login($loginInput, $password)
     {
         $credentials = [
-            filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username' => $login,
+            filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'username' => $loginInput,
             'password' => $password
         ];
 
