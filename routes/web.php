@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('products.index');
 })->name('home');
 
 Route::get('/home', function () {
@@ -51,4 +51,21 @@ Route::prefix('/email')->group(function () {
         ->middleware('throttle:6,1')
         ->name('verification.send');
 })->middleware(['auth']);
+
+
+Route::get('/products/{product}', function(){
+    return view('products.product-detail');
+})->name('product');
+
+Route::get('/about', function(){
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function(){
+    return view('contact');
+})->name('contact');
+
+Route::get('/cart', function(){
+    return view('cart');
+})->name('cart');
 
