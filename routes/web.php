@@ -25,9 +25,10 @@ Route::get('/home', function () {
 });
 
 
+Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified']);
+
 Route::prefix('/auth')->group(function () {
     Route::get('/signup', [AuthController::class, 'index'])->name('signup');
     Route::post('/signup', [AuthController::class, 'store']);
