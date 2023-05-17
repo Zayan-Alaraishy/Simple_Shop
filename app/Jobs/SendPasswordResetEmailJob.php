@@ -3,11 +3,12 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Password;
 
 class SendPasswordResetEmailJob implements ShouldQueue
 {
@@ -32,12 +33,12 @@ class SendPasswordResetEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        $status = Password::sendResetLink(['email' => $this->email]);
+        $response = Password::sendResetLink(['email' => $this->email]);
 
-        if ($status === Password::RESET_LINK_SENT) {
-            // Reset link sent successfully
-        } else {
-            // Reset link sending failed
-        }
+        $message = $response === Password::RESET_LINK_SENT
+        ? 'Password reset link sent successfully.'
+        : 'Failed to send password reset link. Please try again.';
+
+        Session::flash('status', $message);
     }
 }

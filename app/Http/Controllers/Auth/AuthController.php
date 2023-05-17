@@ -13,6 +13,7 @@ use App\Http\Requests\SendResetLinkEmailRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Interfaces\AuthServiceInterface;
+use App\Jobs\SendPasswordResetEmailJob;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 
@@ -71,13 +72,9 @@ class AuthController extends Controller
     
     public function sendResetLinkEmail(SendResetLinkEmailRequest $request)
     {    
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-    
-        return $status === Password::RESET_LINK_SENT
-                    ? back()->with(['status' => __($status)])
-                    : back()->withErrors(['email' => __($status)]);
+        dispatch(new SendPasswordResetEmailJob($request->email));
+        
+        return back()->with('status', 'Reset link sent successfully');
     }
     
     public function showResetForm(Request $request, $token = null)

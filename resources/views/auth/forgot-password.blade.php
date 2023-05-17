@@ -4,9 +4,12 @@
     <label for="email">Email</label>
     <input type="text" id="email" name="email">
     @error('email')
-    <div>{{ $message }}</div>
-@enderror
-    <button type="submit"> submit </button>
+        <div>{{ $message }}</div>
+    @enderror
+    <button type="submit">Submit</button>
 
-    <!-- Other form fields and submit button -->
+    @if(session('status'))
+        <div>{{ session('status') }}</div>
+    @endif
+    
 </form>
