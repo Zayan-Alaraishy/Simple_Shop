@@ -24,6 +24,7 @@ class ProductService
     }
     public function updateProductById($id, $new_details)
     {
+
         return $this->productRepository->update($id, $new_details);
     }
     public function deleteProductById($id)

@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use App\Services\CategoryService;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductController extends Controller
 {
 
     protected $productService;
+    protected $categoryService;
 
     /**
      * ProductController Constructor
@@ -18,9 +22,10 @@ class ProductController extends Controller
      * @param ProductService $productService
      *
      */
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, CategoryService $categoryService)
     {
         $this->productService = $productService;
+        $this->categoryService = $categoryService;
     }
     /**
      * Display a listing of the resource.
@@ -35,7 +40,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        $categories = $this->categoryService->getAllCategories();
+
+        return view('product.create')->with('categories', $categories);
     }
 
     /**
@@ -46,7 +53,7 @@ class ProductController extends Controller
         $message = '';
 
         try {
-            $this->productService->saveProduct($request);
+            $this->productService->saveProduct($request->validated());
             $message = 'Your product has been added!';
         } catch (\Exception $e) {
             $message = 'Failed to create this product!';
@@ -61,9 +68,17 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
+
         $product = $this->productService->getProductById($id);
-        return view('product.show')
-            ->with('product', $product);
+
+        $isAdmin = Auth::check() && Auth::user()->isAdmin();
+
+        if ($isAdmin) {
+            return view('product.admin_show')->with('product', $product);
+
+        } else {
+            return view('product.customer_show')->with('product', $product);
+        }
     }
 
 
@@ -73,9 +88,13 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = $this->productService->getProductById($id);
+        $categories = $this->categoryService->getAllCategories();
 
         return view('product.edit')
-            ->with('product', $product);
+            ->with([
+                'product' => $product,
+                'categories' => $categories
+            ]);
     }
 
     /**
@@ -86,14 +105,14 @@ class ProductController extends Controller
         $message = '';
 
         try {
-            $this->productService->updateProductById($request, $id);
+            $this->productService->updateProductById($id, $request->validated());
 
             $message = 'Your product has been updated!';
         } catch (\Exception $e) {
             $message = 'Failed to update the product!';
         }
 
-        return redirect('/products')
+        return redirect('/products/' . $id)
             ->with('message', $message);
     }
 

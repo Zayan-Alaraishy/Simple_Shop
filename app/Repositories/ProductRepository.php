@@ -41,8 +41,7 @@ class ProductRepository implements IProductRepository
             return null;
         }
 
-        $product->fill($new_details);
-        $product->save();
+        $product->update($new_details);
 
         return $product;
     }

@@ -27,7 +27,6 @@ class UpdateProductRequest extends FormRequest
             'category_id' => 'exists:categories,id',
             'unit_price' => 'numeric|min:0',
             'visibility' => 'boolean',
-            'average_rating' => 'nullable|numeric|min:0|max:5',
             'stock' => 'integer|min:0',
         ];
     }
