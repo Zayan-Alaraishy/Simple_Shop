@@ -4,7 +4,8 @@
     <p><strong>Description:</strong> {{ $product->description }}</p>
     <p><strong>Category:</strong> {{ $product->category->name }}</p>
     <p><strong>Price:</strong> ${{ $product->unit_price }}</p>
-
+<!-- 
+    TOOD:rating and comment
     @if (Auth::check())
     
     <form method="POST" action="/product/{{ $product->id }}/rate">
@@ -31,7 +32,7 @@
         <input type="text" name="comment" placeholder="Add comment">
     @endif
 
-    @endif
+    @endif -->
     <!-- View all the comments on this product -->
 </body>
                     
