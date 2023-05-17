@@ -11,6 +11,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\Profile\ProfileController;
 
+// use App\Http\Controllers\Profile\ProfileController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
