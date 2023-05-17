@@ -2,9 +2,13 @@
 
 namespace App\Services;
 
-use App\Interfaces\AuthRepositoryInterface;
-use App\Interfaces\AuthServiceInterface;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use App\Interfaces\AuthServiceInterface;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use App\Interfaces\AuthRepositoryInterface;
 use App\Jobs\SendEmailVerificationNotification;
 
 class AuthServices implements AuthServiceInterface
@@ -33,5 +37,22 @@ class AuthServices implements AuthServiceInterface
         ];
 
         return auth()->attempt($credentials);
+    }
+
+    public function resetPassword($request)
+    {
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+     
+                $user->save();
+     
+                event(new PasswordReset($user));
+            }
+        );
+   return $status;
     }
 }

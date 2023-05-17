@@ -14,6 +14,8 @@
     <div>{{ $password }}</div>
 @enderror
     <button type="submit"> submit </button>
+    <!-- reset password -->
+    <a href="{{ route('forgot-password') }}">Forgot Password</a>
 
     <!-- Other form fields and submit button -->
 </form>
