@@ -1,9 +1,18 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Profile\ProfileController;
+
+// use App\Http\Controllers\Profile\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +51,18 @@ Route::prefix('/auth')->group(function () {
         ->middleware('auth')
         ->withoutMiddleware('guest');
 
+    // Forgot Password
+    Route::prefix('/')->group(function () {
+        Route::get('/forgot-password', [AuthController::class, 'forgotPasswordForm'])->name('forgot-password');
+    
+        Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('guest')->name('password.email');
+    
+        Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
+    
+        Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+    });
+    
+
 });
 
 // Email verification
@@ -57,3 +78,10 @@ Route::prefix('/email')->group(function () {
         ->middleware('throttle:6,1')
         ->name('verification.send');
 })->middleware(['auth']);
+
+Route::prefix('/profile')->middleware('auth')->group(function () {
+    Route::get('/', [ProfileController::class, 'profilePage'])->name('profile');
+    Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
+    Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
+});
+

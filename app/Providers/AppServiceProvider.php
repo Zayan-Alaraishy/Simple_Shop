@@ -4,8 +4,14 @@ namespace App\Providers;
 
 use App\Interfaces\AuthRepositoryInterface;
 use App\Interfaces\AuthServiceInterface;
+use App\Interfaces\PasswordResetServiceInterface;
+use App\Interfaces\ProfileRepositoryInterface;
+use App\Interfaces\ProfileServiceInterface;
 use App\Repositories\AuthRepository;
+use App\Repositories\ProfileRepository;
 use App\Services\AuthServices;
+use App\Services\PasswordResetService;
+use App\Services\ProfileService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(AuthServiceInterface::class, AuthServices::class);
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
+        $this->app->bind(ProfileServiceInterface::class, ProfileService::class);
+        $this->app->bind(ProfileRepositoryInterface::class, ProfileRepository::class);
+        $this->app->bind(PasswordResetServiceInterface::class, PasswordResetService::class);
+
     }
 
     /**
