@@ -25,14 +25,11 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-Route::get('/', function () {
-    return view('products.index');
-})->name('home');
 
-Route::get('/home', function () {
-    return view('welcome');
+Route::name('home')->group(function(){
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/home', [ProductController::class, 'index']);
 });
-
 
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
@@ -101,4 +98,3 @@ Route::prefix('/profile')->group(function () {
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
 })->middleware(['auth']);
-
