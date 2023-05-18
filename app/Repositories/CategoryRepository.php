@@ -3,9 +3,9 @@ namespace App\Repositories;
 
 use App\Models\Category;
 
-use App\Interfaces\ICategoryRepository;
+use App\Interfaces\CategoryRepositoryInterface;
 
-class CategoryRepository implements ICategoryRepository
+class CategoryRepository implements CategoryRepositoryInterface
 {
     /**
      * @var Category

@@ -21,7 +21,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->name,
             'description' => $this->faker->realText(180),
-            'category_id' => \App\Models\Category::factory()->create()->id,
+            'category_id' =>  rand(1, 10),
             'unit_price' => $this->faker->randomFloat(2, 0, 100),
             'visibility' => $this->faker->boolean(),
             'average_rating' => null,
