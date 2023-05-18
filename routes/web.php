@@ -9,14 +9,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
-<<<<<<< HEAD
 use App\Http\Controllers\Profile\ProfileController;
-
-// use App\Http\Controllers\Profile\ProfileController;
-=======
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
->>>>>>> 805fe4b58e5631b81ee2be5b99e24369f2542e6b
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +75,6 @@ Route::prefix('/email')->group(function () {
     Route::post('/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
-<<<<<<< HEAD
 })->middleware(['auth']);
 
 
@@ -105,8 +98,4 @@ Route::prefix('/profile')->group(function () {
     Route::get('/', [ProfileController::class, 'profilePage'])->name('profile');
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
-});
-
-=======
 })->middleware(['auth']);
->>>>>>> 805fe4b58e5631b81ee2be5b99e24369f2542e6b
