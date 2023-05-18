@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Profile\ProfileController;
 
-// use App\Http\Controllers\Profile\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,18 +33,25 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
+
+Route::get('/products/edit', [ProductController::class, 'edit']);
+Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+
 Route::prefix('/auth')->group(function () {
     Route::get('/signup', [AuthController::class, 'index'])->name('signup');
     Route::post('/signup', [AuthController::class, 'store']);
 
     Route::get('/login', [AuthController::class, 'LoginForm'])->name('login');
-    Route::post('/login',  [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 
     Route::post('/logout', [AuthController::class, 'logout'])
-    ->name('logout')
-    ->middleware('auth')
-    ->withoutMiddleware('guest');
+        ->name('logout')
+        ->middleware('auth')
+        ->withoutMiddleware('guest');
 
     // Forgot Password
     Route::prefix('/')->group(function () {
@@ -78,4 +86,3 @@ Route::prefix('/profile')->middleware('auth')->group(function () {
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
 });
-
