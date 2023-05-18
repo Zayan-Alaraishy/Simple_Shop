@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Repositories\ProductRepository;
+use App\Interfaces\ProductServiceInterface;
 
-class ProductService
+class ProductService implements ProductServiceInterface
 {
 
     protected $productRepository;
