@@ -464,8 +464,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	
 	@if (session('status'))
 	<script>
+		var status = {{Js::from(session('status'))}}
 			Toastify({
-				text: "hello world" ,
+				text: status,
 				duration: 3000,
 				destination: "https://github.com/apvarun/toastify-js",
 				newWindow: true,
@@ -474,7 +475,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				position: "left", // `left`, `center` or `right`
 				stopOnFocus: true, // Prevents dismissing of toast on hover
 				style: {
-				background: "linear-gradient(to right, #00b09b, #96c93d)",
+					padding: "25px 40px",
+					background: "red",
+					fontSize: "20px"
 				},
 				onClick: function(){} // Callback after click
 			}).showToast();

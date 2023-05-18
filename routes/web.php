@@ -4,8 +4,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
-use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Profile\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +19,15 @@ use App\Http\Controllers\ProductController;
 */
 
 
+
 Route::name('home')->group(function(){
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/home', [ProductController::class, 'index']);
 });
 
+
+
+Route::get('/products/edit', [ProductController::class, 'edit']);
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
 Route::get('/products/{id}', [ProductController::class, 'show']);
@@ -70,12 +74,6 @@ Route::prefix('/email')->group(function () {
         ->name('verification.send');
 })->middleware(['auth']);
 
-
-Route::prefix('/profile')->group(function () {
-    Route::get('/', [ProfileController::class, 'profilePage'])->name('profile');
-    Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
-    Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
-})->middleware(['auth']);
 Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/{id}', [ProfileController::class, 'profilePage'])->name('profile');
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');

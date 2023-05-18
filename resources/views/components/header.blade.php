@@ -13,7 +13,7 @@
                         Help &amp; FAQs
                     </a>
                     @auth
-                        <a href="#" class="flex-c-m trans-04 p-lr-25">
+                        <a href={{route('profile', auth()->user()->id)}} class="flex-c-m trans-04 p-lr-25">
                             My Account
                         </a>
                     @endauth
@@ -74,8 +74,12 @@
                         <i class="zmdi zmdi-favorite-outline"></i>
                     </a>
                     <li>
-                        <a href="index.html">Logout</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="cl2 hov-cl1 trans-04 p-l-22 p-r-11">Logout</button>
+                        </form>
                     </li>
+
                 </div>
                 @endauth
                 @guest

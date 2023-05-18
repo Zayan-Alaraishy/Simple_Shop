@@ -7,6 +7,18 @@
                     <h4 class="mtext-105 cl2 js-name-detail p-b-14 txt-center">
                         Profile
                     </h4>
+                    @if ($isPublic)
+                    <p><strong>Username:</strong> {{ $username }}</p>
+                    @else
+                    <p><strong>Private Account</strong></p>
+                    @endif
+                
+                    @if (Auth::check() && Auth::user()->id === $userId)
+                        @if (Auth::check() && Auth::user()->id === $userId && ! $isPublic)
+                            <p><strong>Username:</strong> {{ $username }}</p>
+                        @endif
+                
+                    <p><strong>Email:</strong> {{ $email }}</p>
                     <div class="p-t-15">
                         <form action="{{ route('updateEmail') }}" method="POST" class="m-b-22">
                             @csrf
@@ -30,7 +42,18 @@
                             </div>
                             <x-button type="submit">Update Username</x-button>
                         </form>
+                        <form action="{{ route('toggleAccountPrivacy') }}" method="POST" class="m-b-22">
+                            @csrf
+                            <x-button>
+                                @if ($isPublic)
+                                Make Account Private
+                                @else
+                                Make Account Public
+                                @endif
+                            </x-button>
+                        </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
