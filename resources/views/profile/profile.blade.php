@@ -13,7 +13,15 @@
 
     @if ($isPublic)
     <p><strong>Username:</strong> {{ $username }}</p>
+    @else
+    <p><strong>Private Account</strong></p>
+    @endif
+
     @if (Auth::check() && Auth::user()->id === $userId)
+        @if (Auth::check() && Auth::user()->id === $userId && ! $isPublic)
+            <p><strong>Username:</strong> {{ $username }}</p>
+        @endif
+
     <p><strong>Email:</strong> {{ $email }}</p>
 
     <form action="{{ route('updateEmail') }}" method="POST">
@@ -35,13 +43,7 @@
         <div>{{ $message }}</div>
         @enderror
     </form>
-    @endif
 
-    @else
-    <p><strong>Private Account</strong></p>
-    @endif
-
-    @if (Auth::check() && Auth::user()->id === $userId)
     <form action="{{ route('toggleAccountPrivacy') }}" method="POST">
         @csrf
         <button type="submit">
