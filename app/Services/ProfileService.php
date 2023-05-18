@@ -29,4 +29,9 @@ class ProfileService implements ProfileServiceInterface
     {
         $this->profileRepository->toggleAccountPrivacy($user);
     }
+
+    public function findUserById(int $id): User
+    {
+        return $this->profileRepository->findUserById($id);
+    }
 }
