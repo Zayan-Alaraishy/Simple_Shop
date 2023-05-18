@@ -64,9 +64,12 @@ class ProductController extends Controller
         $message = '';
 
         try {
+    
             $this->productService->saveProduct($request->validated());
             $message = 'Your product has been added!';
         } catch (\Exception $e) {
+            dd($e);
+            dd("Hello");
             $message = 'Failed to create this product!';
         }
 
