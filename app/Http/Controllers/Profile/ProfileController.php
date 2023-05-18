@@ -19,12 +19,21 @@ class ProfileController extends Controller
 
     public function profilePage()
     {
-        return view('profile.profile');
+        $user = Auth::user();
+        return view('profile.profile' , [
+            'username' => $user->username,
+            'email' => $user->email,
+            'isPublic' => $user->is_public,
+        ]);
     }
-    
+
     public function updateEmail(updateEmailRequest $request)
     {
         $user = Auth::user();
+
+        if ($user->id !== Auth::user()->id) {
+            abort(403);
+        }
 
         try {
             $this->profileService->updateEmail($user, $request->email);
@@ -38,9 +47,30 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
+        if ($user->id !== Auth::user()->id) {
+            abort(403);
+        }
+
         try {
             $this->profileService->updateUsername($user, $request->username);
             return back()->with('status', 'Username updated successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
+    }
+
+    public function toggleAccountPrivacy()
+    {
+        $user = Auth::user();
+        
+        if ($user->id !== Auth::user()->id) {
+            abort(403);
+        }
+        
+        try {
+            $user->is_public = !$user->is_public;
+            $user->save();
+            return back()->with('status', 'Account privacy updated successfully');
         } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());
         }

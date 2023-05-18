@@ -7,11 +7,25 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>This is your Profile Page</h1>
-    <!--  i need a form for update email and another for update username and this is my routes :     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
-    Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
--->
+    <h1>Profile Page</h1>
+    
+    <form action="{{ route('toggleAccountPrivacy') }}" method="POST">
+        @csrf
+        <button type="submit">
+            @if ($isPublic)
+                Make Account Private
+            @else
+                Make Account Public
+            @endif
+        </button>
+    </form>
 
+    @if ($isPublic)
+        <p><strong>Email:</strong> {{ $email }}</p>
+        <p><strong>Username:</strong> {{ $username }}</p>
+    @else
+        <p><strong>Private Account</strong></p>
+    @endif
 
     <form action="{{ route('updateEmail') }}" method="POST">
         @csrf
@@ -31,6 +45,5 @@
         <div>{{ $message }}</div>
         @enderror
     </form>
-
 </body>
 </html>
