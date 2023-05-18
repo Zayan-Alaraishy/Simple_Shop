@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Interfaces\ProfileRepositoryInterface;
 use App\Interfaces\ProfileServiceInterface;
+use App\Jobs\SendEmailVerificationNotification;
 use App\Models\User;
 
 class ProfileService implements ProfileServiceInterface
@@ -18,6 +19,7 @@ class ProfileService implements ProfileServiceInterface
     public function updateEmail(User $user, string $email): void
     {
         $this->profileRepository->updateEmail($user, $email);
+        dispatch(new SendEmailVerificationNotification($user));
     }
 
     public function updateUsername(User $user, string $username): void
