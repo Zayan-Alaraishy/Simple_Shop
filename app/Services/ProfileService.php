@@ -24,4 +24,14 @@ class ProfileService implements ProfileServiceInterface
     {
         $this->profileRepository->updateUsername($user, $username);
     }
+
+    public function toggleAccountPrivacy(User $user): void
+    {
+        $this->profileRepository->toggleAccountPrivacy($user);
+    }
+
+    public function findUserById(int $id): User
+    {
+        return $this->profileRepository->findUserById($id);
+    }
 }

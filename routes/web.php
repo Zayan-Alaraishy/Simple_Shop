@@ -74,8 +74,9 @@ Route::prefix('/email')->group(function () {
         ->name('verification.send');
 })->middleware(['auth']);
 
-Route::prefix('/profile')->middleware('auth')->group(function () {
-    Route::get('/', [ProfileController::class, 'profilePage'])->name('profile');
+Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/{id}', [ProfileController::class, 'profilePage'])->name('profile');
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
+    Route::post('/toggle-account-privacy', [ProfileController::class, 'toggleAccountPrivacy'])->name('toggleAccountPrivacy');
 });

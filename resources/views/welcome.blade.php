@@ -17,7 +17,7 @@
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit">Logout</button>
-            <a href={{ route('profile') }}>Profile</a>
+            <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">Profile</a>
         </form>
     @endauth
 
