@@ -9,6 +9,7 @@ class ProfileRepository implements ProfileRepositoryInterface
 {
     public function updateEmail(User $user, string $email): void
     {
+        $user->email_verified_at = null;
         $user->email = $email;
         $user->save();
     }
