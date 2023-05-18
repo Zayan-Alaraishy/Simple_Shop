@@ -89,7 +89,8 @@ Route::get('/contact', function(){
 Route::get('/cart', function(){
     return view('cart');
 })->name('cart');
-Route::prefix('/profile')->middleware('auth')->group(function () {
+
+Route::prefix('/profile')->group(function () {
     Route::get('/', [ProfileController::class, 'profilePage'])->name('profile');
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');

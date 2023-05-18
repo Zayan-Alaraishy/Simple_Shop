@@ -7,10 +7,6 @@
                     <h4 class="mtext-105 cl2 js-name-detail p-b-14 txt-center">
                         Signup
                     </h4>
-                    <!-- old read from the old session data -->
-                    @if (session('status'))
-                        {{ session('status') }}
-                    @endif
                     <div class="p-t-15">
                         <div class="bg0 m-b-12">
                             <x-input type="text" name="email" placeholder="Email" value="{{ old('email') }}" />
