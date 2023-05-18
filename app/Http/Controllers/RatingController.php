@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRatingRequest;
 use App\Http\Requests\UpdateRatingRequest;
 use App\Models\Rating;
+use Illuminate\Support\Facades\Auth;
+
 
 class RatingController extends Controller
 {
@@ -29,7 +31,19 @@ class RatingController extends Controller
      */
     public function store(StoreRatingRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        // Create or update the rating record
+        $rating = Rating::create(
+            [
+                'product_id' => $validatedData['product_id'],
+                'user_id' => Auth::user()->id,
+                'rating' => $validatedData['rating'],
+                'comment' => $validatedData['comment']
+            ],
+        );
+
+        // TOOD:Redirect back or show a success message
+        // return redirect('/products'); //->back()->with('success', 'Rating submitted successfully.');
     }
 
     /**

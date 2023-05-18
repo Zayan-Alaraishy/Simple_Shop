@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,8 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
+
+// Route::post('/product/{id}/rate', [RatingController::class, 'store'])->name('product.rate.store');
 
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index']);

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
+use App\Services\RatingService;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -15,6 +16,7 @@ class ProductController extends Controller
 
     protected $productService;
     protected $categoryService;
+    protected $ratingService;
 
     /**
      * ProductController Constructor
@@ -22,10 +24,11 @@ class ProductController extends Controller
      * @param ProductService $productService
      *
      */
-    public function __construct(ProductService $productService, CategoryService $categoryService)
+    public function __construct(ProductService $productService, CategoryService $categoryService, RatingService $ratingService)
     {
         $this->productService = $productService;
         $this->categoryService = $categoryService;
+        $this->ratingService = $ratingService;
     }
     /**
      * Display a listing of the resource.
@@ -71,13 +74,15 @@ class ProductController extends Controller
 
         $product = $this->productService->getProductById($id);
 
+        $user_review = $this->ratingService->getUserRatingForProduct($id, auth()->id());
+
         $isAdmin = Auth::check() && Auth::user()->isAdmin();
 
         if ($isAdmin) {
             return view('product.admin_show')->with('product', $product);
 
         } else {
-            return view('product.customer_show')->with('product', $product);
+            return view('product.customer_show')->with(['product' => $product, 'user_review' => $user_review]);
         }
     }
 
