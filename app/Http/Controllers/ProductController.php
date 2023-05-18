@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -30,9 +32,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $visibility = $request->input('visibility');
+        $category = $request->input('category');
+        $name = $request->input('name');
+        $sortBy = $request->input('sort_by');
+        $perPage = $request->input('per_page');
+
+        $products = $this->productService->getProducts($category, $name, $sortBy, $perPage);
+
+        $categories = Category::all();
+        return view('products.index', compact('products', 'categories'));
     }
 
     /**
