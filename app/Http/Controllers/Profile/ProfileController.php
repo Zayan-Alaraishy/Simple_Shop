@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\updateEmailRequest;
 use App\Http\Requests\updateUsernameRequest;
 use App\Interfaces\ProfileServiceInterface;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -17,13 +18,15 @@ class ProfileController extends Controller
         $this->profileService = $profileService;
     }
 
-    public function profilePage()
+    public function profilePage($id)
     {
-        $user = Auth::user();
+        $user = User::findOrFail($id);
+
         return view('profile.profile' , [
             'username' => $user->username,
             'email' => $user->email,
             'isPublic' => $user->is_public,
+            'userId' => $user->id,
         ]);
     }
 
@@ -68,8 +71,7 @@ class ProfileController extends Controller
         }
         
         try {
-            $user->is_public = !$user->is_public;
-            $user->save();
+            $this->profileService->toggleAccountPrivacy($user);
             return back()->with('status', 'Account privacy updated successfully');
         } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());

@@ -1,31 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <h1>Profile Page</h1>
-    
-    <form action="{{ route('toggleAccountPrivacy') }}" method="POST">
-        @csrf
-        <button type="submit">
-            @if ($isPublic)
-                Make Account Private
-            @else
-                Make Account Public
-            @endif
-        </button>
-    </form>
 
     @if ($isPublic)
-        <p><strong>Email:</strong> {{ $email }}</p>
-        <p><strong>Username:</strong> {{ $username }}</p>
-    @else
-        <p><strong>Private Account</strong></p>
-    @endif
+    <p><strong>Username:</strong> {{ $username }}</p>
+    @if (Auth::check() && Auth::user()->id === $userId)
+    <p><strong>Email:</strong> {{ $email }}</p>
 
     <form action="{{ route('updateEmail') }}" method="POST">
         @csrf
@@ -36,6 +25,7 @@
         <div>{{ $message }}</div>
         @enderror
     </form>
+
     <form action="{{ route('updateUsername') }}" method="POST">
         @csrf
         @method('PUT')
@@ -45,5 +35,30 @@
         <div>{{ $message }}</div>
         @enderror
     </form>
+    @endif
+
+    @else
+    <p><strong>Private Account</strong></p>
+    @endif
+
+    @if (Auth::check() && Auth::user()->id === $userId)
+    <form action="{{ route('toggleAccountPrivacy') }}" method="POST">
+        @csrf
+        <button type="submit">
+            @if ($isPublic)
+            Make Account Private
+            @else
+            Make Account Public
+            @endif
+        </button>
+    </form>
+    @endif
+
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+        <a href="{{ route('home') }}">Home</a>
+    </form>
 </body>
+
 </html>

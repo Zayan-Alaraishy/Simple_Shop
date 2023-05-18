@@ -18,4 +18,10 @@ class ProfileRepository implements ProfileRepositoryInterface
         $user->username = $username;
         $user->save();
     }
+
+    public function toggleAccountPrivacy(User $user): void
+    {
+        $user->is_public = !$user->is_public;
+        $user->save();
+    }
 }
