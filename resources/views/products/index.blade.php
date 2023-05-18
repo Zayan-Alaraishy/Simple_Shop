@@ -44,16 +44,16 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>
-                    <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sortBy' => 'unit_price']) }}"
-                       class="{{ request('sortBy') == 'unit_price' ? 'active-link' : '' }}">Unit Price</a>
+                    <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'unit_price']) }}"
+                       class="{{ request('sort_by') == 'unit_price' ? 'active-link' : '' }}">Unit Price</a>
                 </th>
                 <th>
-                    <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sortBy' => 'name']) }}"
-                       class="{{ request('sortBy') == 'name' ? 'active-link' : '' }}">Name</a>
+                    <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'name']) }}"
+                       class="{{ request('sort_by') == 'name' ? 'active-link' : '' }}">Name</a>
                 </th>
                 <th>
-                    <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sortBy' => 'category']) }}"
-                       class="{{ request('sortBy') == 'category' ? 'active-link' : '' }}">Category</a>
+                    <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'category']) }}"
+                       class="{{ request('sort_by') == 'category' ? 'active-link' : '' }}">Category</a>
                 </th>
                 <th>Stock</th>
             </tr>
@@ -71,6 +71,6 @@
         </tbody>
     </table>
 
-    {{ $products->appends(['category' => request('category'), 'name' => request('name'), 'sortBy' => request('sortBy')])->links() }}
+    {{ $products->appends(['category' => request('category'), 'name' => request('name'), 'sort_by' => request('sort_by')])->links() }}
 </body>
 </html>

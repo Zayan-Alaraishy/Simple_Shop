@@ -12,6 +12,8 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\ProductController;
 
+// use App\Http\Controllers\Profile\ProfileController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -99,3 +101,4 @@ Route::prefix('/profile')->group(function () {
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
 })->middleware(['auth']);
+
