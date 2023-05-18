@@ -1,18 +1,11 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\ProductController;
-
-// use App\Http\Controllers\Profile\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +27,7 @@ Route::name('home')->group(function(){
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
 Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
 
 Route::prefix('/auth')->group(function () {
     Route::get('/signup', [AuthController::class, 'index'])->name('signup');
@@ -51,14 +45,14 @@ Route::prefix('/auth')->group(function () {
     // Forgot Password
     Route::prefix('/')->group(function () {
         Route::get('/forgot-password', [AuthController::class, 'forgotPasswordForm'])->name('forgot-password');
-    
+
         Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('guest')->name('password.email');
-    
+
         Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
-    
+
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
     });
-    
+
 
 });
 
@@ -69,7 +63,7 @@ Route::prefix('/email')->group(function () {
         ->name('verification.notice');
 
     Route::get('/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-        ->middleware('signed')->name('verification.verify');
+        ->middleware('auth')->name('verification.verify');
 
     Route::post('/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])
         ->middleware('throttle:6,1')
@@ -77,24 +71,19 @@ Route::prefix('/email')->group(function () {
 })->middleware(['auth']);
 
 
-Route::get('/products/{product}', function(){
-    return view('products.product-detail');
-})->name('product');
-
-Route::get('/about', function(){
-    return view('about');
-})->name('about');
-
-Route::get('/contact', function(){
-    return view('contact');
-})->name('contact');
-
-Route::get('/cart', function(){
-    return view('cart');
-})->name('cart');
-
 Route::prefix('/profile')->group(function () {
     Route::get('/', [ProfileController::class, 'profilePage'])->name('profile');
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
 })->middleware(['auth']);
+Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/{id}', [ProfileController::class, 'profilePage'])->name('profile');
+    Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
+    Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
+    Route::post('/toggle-account-privacy', [ProfileController::class, 'toggleAccountPrivacy'])->name('toggleAccountPrivacy');
+});
+
+Route::view('/about', 'about')->name('about');
+Route::view('/cart', 'cart')->name('cart');
+Route::view('/contact', 'contact')->name('contact');
+Route::view('/products/{product}', 'products.product-detail')->name('product');
