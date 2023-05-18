@@ -26,7 +26,7 @@ Route::get('/home', function () {
 
 
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
-Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products', [ProductController::class, 'index'])->name("products.index");
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
 Route::prefix('/auth')->group(function () {

@@ -33,5 +33,10 @@ class ProductService
 
     }
 
+    public function getProducts($category = null, $name = null, $sortBy = null, $perPage = 10)
+    {
+        return $this->productRepository->getProducts($category, $name, $sortBy, $perPage);
+    }
+
 
 }
