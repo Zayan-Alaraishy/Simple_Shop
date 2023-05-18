@@ -1,15 +1,9 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Profile\ProfileController;
 
@@ -56,14 +50,14 @@ Route::prefix('/auth')->group(function () {
     // Forgot Password
     Route::prefix('/')->group(function () {
         Route::get('/forgot-password', [AuthController::class, 'forgotPasswordForm'])->name('forgot-password');
-    
+
         Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('guest')->name('password.email');
-    
+
         Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->middleware('guest')->name('password.reset');
-    
+
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
     });
-    
+
 
 });
 
@@ -74,7 +68,7 @@ Route::prefix('/email')->group(function () {
         ->name('verification.notice');
 
     Route::get('/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-        ->middleware('signed')->name('verification.verify');
+        ->middleware('auth')->name('verification.verify');
 
     Route::post('/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])
         ->middleware('throttle:6,1')
