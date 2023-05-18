@@ -11,21 +11,24 @@
         <p><strong>Visibilty:</strong> {{ $product->visibility }}</p>
         <p>Reviews:</p>
         <!-- TODO: view al the commnets on this product -->
-        <a href="/products/{{ $product->id }}/edit">Edit</a>  
+        <a href="/products/{{ $product->id }}/edit">Edit</a>
         <form action="/products/{{ $product->id }}" method="POST">
+            @foreach ($product['images'] as $imagePath)
+            <img src="{{ asset('storage' . $imagePath) }}" alt="Uploaded Image">
+        @endforeach
           @csrf
-          @method('delete')  
+          @method('delete')
          <button type="submit" >
              Delete
          </button>
         </form>
     </div>
 </body>
-      
-     
-    
 
- 
+
+
+
+
 
 
 
