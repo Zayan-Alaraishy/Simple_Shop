@@ -9,9 +9,14 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
+<<<<<<< HEAD
 use App\Http\Controllers\Profile\ProfileController;
 
 // use App\Http\Controllers\Profile\ProfileController;
+=======
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+>>>>>>> 805fe4b58e5631b81ee2be5b99e24369f2542e6b
 
 /*
 |--------------------------------------------------------------------------
@@ -32,18 +37,23 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
+
+Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
+Route::get('/products', [ProductController::class, 'index'])->name("products.index");
+Route::get('/products/{id}', [ProductController::class, 'show']);
+
 Route::prefix('/auth')->group(function () {
     Route::get('/signup', [AuthController::class, 'index'])->name('signup');
     Route::post('/signup', [AuthController::class, 'store']);
 
     Route::get('/login', [AuthController::class, 'LoginForm'])->name('login');
-    Route::post('/login',  [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 
     Route::post('/logout', [AuthController::class, 'logout'])
-    ->name('logout')
-    ->middleware('auth')
-    ->withoutMiddleware('guest');
+        ->name('logout')
+        ->middleware('auth')
+        ->withoutMiddleware('guest');
 
     // Forgot Password
     Route::prefix('/')->group(function () {
@@ -71,6 +81,7 @@ Route::prefix('/email')->group(function () {
     Route::post('/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+<<<<<<< HEAD
 })->middleware(['auth']);
 
 
@@ -96,3 +107,6 @@ Route::prefix('/profile')->group(function () {
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
 });
 
+=======
+})->middleware(['auth']);
+>>>>>>> 805fe4b58e5631b81ee2be5b99e24369f2542e6b
