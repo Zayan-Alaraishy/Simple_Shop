@@ -14,14 +14,14 @@
                                 <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
-                
+
                         <div class="bg0 m-b-12">
                             <x-textarea name="description">{{ old('description') !== null? old('description'): 'Description' }}</x-textarea>
                             @error('description')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
-                
+
                         <div class="bg0 m-b-12">
                             <x-select name="category_id">
                                 @foreach ($categories as $category)
@@ -34,28 +34,28 @@
                                 <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
-                
+
                         <div class="bg0 m-b-12">
                             <x-input type="number" name="unit_price" step="0.01" value="{{ old('unit_price') }}" placeholder='Unit Price' />
                             @error('unit_price')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
-                
+
                         <div class="bg0 m-b-12">
                             <x-checkbox label='visibility' labelText="Visible?" name="visibility" value="1"/>
                             @error('visibility')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
-                
+
                         <div class="bg0 m-b-12">
                             <x-input type="number" name="stock" value="{{ old('stock') }}" placeholder="Stock" />
                             @error('stock')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
-                
+
                         <div class="bg0 m-b-12">
                             <label for="images">Images</label>
                             <input type="file" name="images[]" multiple accept="image/*">
@@ -68,5 +68,5 @@
                 </div>
             </div>
         </div>
-    </form>    
+    </form>
 </x-layout>
