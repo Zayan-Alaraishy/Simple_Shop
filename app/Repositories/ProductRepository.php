@@ -56,7 +56,6 @@ class ProductRepository implements ProductRepositoryInterface
     public function getProducts($category = null, $name = null, $sortBy = null, $perPage = 10)
     {
         $query = Product::query();
-
         if (!(Auth::check() && Auth::user()->isAdmin())) {
             $query->where('visibility', 1);
         }
@@ -80,7 +79,7 @@ class ProductRepository implements ProductRepositoryInterface
             $query->orderBy($sortBy);
         }
 
-        return $query->paginate($perPage);
+        return $query->simplePaginate($perPage);
     }
 
 }

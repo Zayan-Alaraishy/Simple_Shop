@@ -1,66 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    <h1>Profile Page</h1>
-
-    @if ($isPublic)
-    <p><strong>Username:</strong> {{ $username }}</p>
-    @else
-    <p><strong>Private Account</strong></p>
-    @endif
-
-    @if (Auth::check() && Auth::user()->id === $userId)
-        @if (Auth::check() && Auth::user()->id === $userId && ! $isPublic)
-            <p><strong>Username:</strong> {{ $username }}</p>
-        @endif
-
-    <p><strong>Email:</strong> {{ $email }}</p>
-
-    <form action="{{ route('updateEmail') }}" method="POST">
+<x-layout>
+    <div class="bg0 p-t-75 p-b-85"  method="POST" action={{ route('login') }}>
         @csrf
-        @method('PUT')
-        <input type="email" name="email" placeholder="Enter your new email">
-        <button type="submit">Update Email</button>
-        @error('email')
-        <div>{{ $message }}</div>
-        @enderror
-    </form>
-
-    <form action="{{ route('updateUsername') }}" method="POST">
-        @csrf
-        @method('PUT')
-        <input type="text" name="username" placeholder="Enter your new username">
-        <button type="submit">Update Username</button>
-        @error('username')
-        <div>{{ $message }}</div>
-        @enderror
-    </form>
-
-    <form action="{{ route('toggleAccountPrivacy') }}" method="POST">
-        @csrf
-        <button type="submit">
-            @if ($isPublic)
-            Make Account Private
-            @else
-            Make Account Public
-            @endif
-        </button>
-    </form>
-    @endif
-
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit">Logout</button>
-        <a href="{{ route('home') }}">Home</a>
-    </form>
-</body>
-
-</html>
+		<div class="container">
+            <div class="dis-flex flex-col flex-m bor12 p-t-15 p-b-30">
+                <div class="size-210 p-r-18 p-r-0-sm w-full-ssm">
+                    <h4 class="mtext-105 cl2 js-name-detail p-b-14 txt-center">
+                        Profile
+                    </h4>
+                    @if ($isPublic)
+                    <p><strong>Username:</strong> {{ $username }}</p>
+                    @else
+                    <p><strong>Private Account</strong></p>
+                    @endif
+                
+                    @if (Auth::check() && Auth::user()->id === $userId)
+                        @if (Auth::check() && Auth::user()->id === $userId && ! $isPublic)
+                            <p><strong>Username:</strong> {{ $username }}</p>
+                        @endif
+                
+                    <p><strong>Email:</strong> {{ $email }}</p>
+                    <div class="p-t-15">
+                        <form action="{{ route('updateEmail') }}" method="POST" class="m-b-22">
+                            @csrf
+                            @method('PUT')
+                            <div class="bg0 m-b-22">
+                                <x-input type="email" name="email" placeholder="Enter your new email" />
+                                @error('username')
+                                    <x-error>{{ $message }}</x-error>
+                                @enderror
+                            </div>
+                            <x-button type="submit">Update Email</x-button>
+                        </form>
+                        <form action="{{ route('updateUsername') }}" method="POST" class="m-b-22">
+                            @csrf
+                            @method('PUT')
+                            <div class="m-b-22">
+                                <x-input type="text" name="username" placeholder="Enter your new username" />
+                                @error('username')
+                                    <x-error>{{ $message }}</x-error>
+                                @enderror
+                            </div>
+                            <x-button type="submit">Update Username</x-button>
+                        </form>
+                        <form action="{{ route('toggleAccountPrivacy') }}" method="POST" class="m-b-22">
+                            @csrf
+                            <x-button>
+                                @if ($isPublic)
+                                Make Account Private
+                                @else
+                                Make Account Public
+                                @endif
+                            </x-button>
+                        </form>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>    
+</x-layout>
