@@ -27,7 +27,7 @@ Route::get('/home', function () {
 });
 
 
-Route::get('/products/edit', [ProductController::class, 'edit']);
+
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
 Route::get('/products/{id}', [ProductController::class, 'show']);

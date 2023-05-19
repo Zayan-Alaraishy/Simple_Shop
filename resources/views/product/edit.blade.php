@@ -1,6 +1,6 @@
 <h1>Edit Product</h1>
 
-<form action="/products/{{ $product->id }}" method="POST">
+<form action="/products/{{ $product->id }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -39,6 +39,20 @@
         <label for="stock">Stock</label>
         <input type="number" name="stock" value="{{ $product->stock }}">
     </div>
+    <div>
+        <label for="images">Images</label>
+        <input type="file" name="images[]" multiple accept="image/*">
+        @error('images.*')
+            @error('images')
+                <span class="error">{{ $message }}</span>
+            @enderror
+
+        @enderror
+    </div>
+
+    @foreach ($product['images'] as $imagePath)
+        <img src="{{ Storage::url($imagePath) }}" class="card-img-top">
+    @endforeach
 
     <button type="submit">Update</button>
 </form>

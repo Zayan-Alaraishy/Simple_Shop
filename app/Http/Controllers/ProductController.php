@@ -64,7 +64,7 @@ class ProductController extends Controller
         $message = '';
 
         try {
-    
+
             $this->productService->saveProduct($request->validated());
             $message = 'Your product has been added!';
         } catch (\Exception $e) {
@@ -120,7 +120,6 @@ class ProductController extends Controller
 
         try {
             $this->productService->updateProductById($id, $request->validated());
-
             $message = 'Your product has been updated!';
         } catch (\Exception $e) {
             $message = 'Failed to update the product!';

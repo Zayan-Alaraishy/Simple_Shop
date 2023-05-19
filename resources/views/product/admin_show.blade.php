@@ -12,10 +12,10 @@
         <p>Reviews:</p>
         <!-- TODO: view al the commnets on this product -->
         <a href="/products/{{ $product->id }}/edit">Edit</a>
-        <form action="/products/{{ $product->id }}" method="POST">
-            @foreach ($product['images'] as $imagePath)
-            <img src="{{ asset('storage' . $imagePath) }}" alt="Uploaded Image">
-        @endforeach
+        @foreach ($product['images'] as $imagePath)
+        <img src="{{ Storage::url($imagePath) }}" class="card-img-top">
+    @endforeach
+
           @csrf
           @method('delete')
          <button type="submit" >
