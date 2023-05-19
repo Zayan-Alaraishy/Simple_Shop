@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,10 +19,11 @@ class ProductFactory extends Factory
 
     public function definition()
     {
+        $categoriesCount = Category::count();
         return [
             'name' => $this->faker->name,
             'description' => $this->faker->realText(180),
-            'category_id' =>  rand(1, 10),
+            'category_id' => rand(1, $categoriesCount),
             'unit_price' => $this->faker->randomFloat(2, 0, 100),
             'visibility' => $this->faker->boolean(),
             'average_rating' => null,
