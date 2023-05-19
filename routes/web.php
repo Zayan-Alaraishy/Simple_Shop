@@ -26,12 +26,9 @@ Route::name('home')->group(function(){
 });
 
 
-
-Route::get('/products/edit', [ProductController::class, 'edit']);
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
-Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 Route::prefix('/auth')->group(function () {
     Route::get('/signup', [AuthController::class, 'index'])->name('signup');
