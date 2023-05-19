@@ -1,8 +1,8 @@
 <body style="font-family: Arial, Helvetica, sans-serif; padding:0.5em">
     In admin_show
     <div>
-       <h3 >{{ $product->name }}</h3>
-        <h3 >Average rating: {{ $product->average_rating }}</h3>
+        <h3>{{ $product->name }}</h3>
+        <h3>Average rating: {{ $product->average_rating }}</h3>
         <p><strong>Description:</strong> {{ $product->description }}</p>
         <p><strong>Category:</strong> {{ $product->category->name }}</p>
         <p><strong>Created at:</strong> {{ $product->created_at }}</p>
@@ -14,22 +14,14 @@
         <a href="/products/{{ $product->id }}/edit">Edit</a>
         <form action="/products/{{ $product->id }}" method="POST">
             @foreach ($product['images'] as $imagePath)
-            <img src="{{ asset('storage' . $imagePath) }}" alt="Uploaded Image">
-        @endforeach
-          @csrf
-          @method('delete')
-         <button type="submit" >
-             Delete
-         </button>
+                <p>{{ asset('storage/' . $imagePath) }}</p>
+                <img src="{{ Storage::url($imagePath) }}" class="card-img-top">
+            @endforeach
+            @csrf
+            @method('delete')
+            <button type="submit">
+                Delete
+            </button>
         </form>
     </div>
 </body>
-
-
-
-
-
-
-
-
-
