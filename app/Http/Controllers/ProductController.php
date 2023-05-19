@@ -56,7 +56,7 @@ class ProductController extends Controller
     {
         $categories = $this->categoryService->getAllCategories();
 
-        return view('product.create')->with('categories', $categories);
+        return view('products.create')->with('categories', $categories);
     }
 
     /**
@@ -93,10 +93,10 @@ class ProductController extends Controller
         $isAdmin = Auth::check() && Auth::user()->isAdmin();
 
         if ($isAdmin) {
-            return view('product.admin_show')->with('product', $product);
+            return view('products.admin_show')->with('product', $product);
 
         } else {
-            return view('product.customer_show')->with(['product' => $product, 'user_review' => $user_review]);
+            return view('products.customer_show')->with('product', $product);
         }
     }
 
@@ -109,7 +109,7 @@ class ProductController extends Controller
         $product = $this->productService->getProductById($id);
         $categories = $this->categoryService->getAllCategories();
 
-        return view('product.edit')
+        return view('products.edit')
             ->with([
                 'product' => $product,
                 'categories' => $categories

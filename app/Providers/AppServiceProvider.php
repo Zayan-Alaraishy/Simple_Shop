@@ -12,6 +12,7 @@ use App\Repositories\ProfileRepository;
 use App\Services\AuthServices;
 use App\Services\PasswordResetService;
 use App\Services\ProfileService;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +35,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Paginator::useBootstrap();
     }
 }
