@@ -18,20 +18,21 @@ use App\Http\Controllers\Profile\ProfileController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
 
-Route::get('/home', function () {
-    return view('welcome');
+
+Route::name('home')->group(function(){
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('/home', [ProductController::class, 'index']);
 });
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dedd09ba586328f68d739c9e4d8cd7a79c93b34d
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
-Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 Route::prefix('/auth')->group(function () {
     Route::get('/signup', [AuthController::class, 'index'])->name('signup');
@@ -74,8 +75,14 @@ Route::prefix('/email')->group(function () {
         ->name('verification.send');
 })->middleware(['auth']);
 
-Route::prefix('/profile')->middleware('auth')->group(function () {
-    Route::get('/', [ProfileController::class, 'profilePage'])->name('profile');
+Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/{id}', [ProfileController::class, 'profilePage'])->name('profile');
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
+    Route::post('/toggle-account-privacy', [ProfileController::class, 'toggleAccountPrivacy'])->name('toggleAccountPrivacy');
 });
+
+Route::view('/about', 'about')->name('about');
+Route::view('/cart', 'cart')->name('cart');
+Route::view('/contact', 'contact')->name('contact');
+Route::view('/products/{product}', 'products.product-detail')->name('product');
