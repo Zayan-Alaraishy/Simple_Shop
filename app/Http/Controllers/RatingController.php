@@ -5,76 +5,50 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRatingRequest;
 use App\Http\Requests\UpdateRatingRequest;
 use App\Models\Rating;
+use App\Services\RatingService;
 use Illuminate\Support\Facades\Auth;
 
 
 class RatingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private $ratingService;
+
+    public function __construct(RatingService $ratingService)
     {
-        //
+        $this->ratingService = $ratingService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreRatingRequest $request)
     {
+
         $validatedData = $request->validated();
-        // Create or update the rating record
-        $rating = Rating::create(
-            [
-                'product_id' => $validatedData['product_id'],
-                'user_id' => Auth::user()->id,
-                'rating' => $validatedData['rating'],
-                'comment' => $validatedData['comment']
-            ],
-        );
+        $userId = Auth::user()->id;
+        $Rating = $this->ratingService->createRating($validatedData, $userId);
+        return response()->json($Rating, 201);
 
-        // TOOD:Redirect back or show a success message
-        // return redirect('/products'); //->back()->with('success', 'Rating submitted successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Rating $rating)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateRatingRequest $request, Rating $rating)
     {
-        //
+        $validatedData = $request->validated();
+        $currentUser = Auth::user()->id;
+        $ratingId = Auth::user()->id;
+        $rating = $this->ratingService->updateRating($ratingId, $validatedData, $currentUser);
+        return response()->json($rating);
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Rating $rating)
     {
-        //
+        $ratingId = $rating["id"];
+        $currentUser = Auth::user()->id;
+        $this->ratingService->deleteRating($ratingId, $currentUser);
+
+        return response()->json(null, 204);
     }
+
+
 }
