@@ -1,8 +1,9 @@
+{{-- {{$cartItems}} --}}
 <x-layout>
 	<!-- breadcrumb -->
 	<div class="container">
 		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-			<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+			<a href="{{route('home')}}" class="stext-109 cl8 hov-cl1 trans-04">
 				Home
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
@@ -15,7 +16,7 @@
 		
 
 	<!-- Shoping Cart -->
-	<form class="bg0 p-t-75 p-b-85">
+	<div class="bg0 p-t-75 p-b-85">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -23,17 +24,20 @@
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart">
 								<tr class="table_head">
+									<th></th>
 									<th class="column-1">Product</th>
 									<th class="column-2"></th>
 									<th class="column-3">Price</th>
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
-
-								<x-cart-row />
-								<x-cart-row />
-								<x-cart-row />
-								
+								@isset($cartItems)
+									@forelse ($cartItems as $cartItem )
+										<x-cart-row :cartItem="$cartItem"/>	
+									@empty
+										</tr>Your Cart is Empty</tr>
+									@endforelse
+								@endisset
 							</table>
 						</div>
 
@@ -68,7 +72,7 @@
 
 							<div class="size-209">
 								<span class="mtext-110 cl2">
-									$79.65
+									${{$cartTotal}}
 								</span>
 							</div>
 						</div>
@@ -138,12 +142,5 @@
 				</div>
 			</div>
 		</div>
-	</form>
-		
+	</div>
 </x-layout>
-
-
-	
-		
-
-	

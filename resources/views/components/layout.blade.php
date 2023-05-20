@@ -39,7 +39,6 @@
 
 </head>
 <body class="animsition">
-	
 	<!-- Header -->
 	<x-header />
 

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,13 @@ class CartFactory extends Factory
      */
     public function definition(): array
     {
+        // $product = Product::factory()->make();
+
         return [
-            //
+            'product_id' => Product::factory(),
+            'user_id' => User::factory(),
+            'desired_quantity' =>  rand(1, 10),
+            'unit_price' =>  $this->faker->randomFloat(2, 0, 100)
         ];
     }
 }

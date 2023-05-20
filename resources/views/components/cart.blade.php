@@ -14,18 +14,22 @@
         
         <div class="header-cart-content flex-w js-pscroll">
             <ul class="header-cart-wrapitem w-full">
-                <x-sidebar-cart-card />
-                <x-sidebar-cart-card />
-                <x-sidebar-cart-card />
+                @isset($cartItems)
+                    @forelse ($cartItems as $cartItem)
+                        <x-sidebar-cart-card :cartItem="$cartItem"/>
+                    @empty
+                        <p>Your cart is empty</p>
+                    @endforelse
+                @endisset
             </ul>
             
             <div class="w-full">
                 <div class="header-cart-total w-full p-tb-40">
-                    Total: $75.00
+                    Total: @isset($cartItems) ${{$cartTotal}} @endisset
                 </div>
 
                 <div class="header-cart-buttons flex-w w-full">
-                    <a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+                    <a href="{{route('carts.index')}}" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
                         View Cart
                     </a>
 
