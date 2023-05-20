@@ -40,7 +40,18 @@ class CartService implements CartServiceInterface
 
     public function update($id, $desiredQuantity)
     {
-        return $this->cartRepository->update($id, $desiredQuantity);
+        return $this->cartRepository->update($id, $desiredQuantity, true);
+    }
+
+    public function bulkUpdate($cartItems)
+    {
+        foreach($cartItems as $key => $value ){
+            if($value > 0){
+                $this->cartRepository->update($key, $value, false);
+            } else {
+                $this->cartRepository->delete($key);
+            }
+        }
     }
 
     public function delete($id)

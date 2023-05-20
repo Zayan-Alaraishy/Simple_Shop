@@ -36,11 +36,14 @@ class CartRepository implements CartRepositoryInterface
         return Cart::create($item);
     }
 
-    public function update($id, $quantity)
+    public function update($id, $quantity, bool $isIncrement)
     {
         $cart = $this->getById($id);
-
-        $cart->increment('desired_quantity', $quantity);
+        if($isIncrement){
+            $cart->increment('desired_quantity', $quantity);
+        } else {
+            $cart->update(['desired_quantity' => $quantity]);
+        }
 
         return $cart;
     }

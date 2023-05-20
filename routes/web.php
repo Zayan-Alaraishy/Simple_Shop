@@ -85,3 +85,4 @@ Route::view('/products/{product}', 'products.product-detail')->name('product');
 
 // Route::put('/carts', [CartController::class, 'carts.update']);
 Route::resource('/carts', CartController::class)->except(['create','show','edit'])->middleware(['auth', 'verified']);
+Route::post('/carts/bulk', [CartController::class, 'bulkUpdate'])->middleware(['auth', 'verified'])->name('carts.bulkUpdate');

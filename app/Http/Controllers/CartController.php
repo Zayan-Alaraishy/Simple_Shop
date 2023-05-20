@@ -67,6 +67,22 @@ class CartController extends Controller
         }
     }
 
+    public function bulkUpdate(UpdateCartRequest $request)
+    {
+        // $this->authorize('update', $cart);
+        // try {
+            $cartItems = $request->input('cartitems');
+            // dd($cartItems);
+            $this->cartService->bulkUpdate($cartItems);
+            return redirect(route('carts.index'))
+                ->with('status', 'Cart updated successfully'); 
+
+        // } catch (\Exception $e) {
+        //     return redirect(route('carts.index'))
+        //         ->with('error', 'Failed to update cart'); 
+        // }
+    }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -1,4 +1,46 @@
-{{-- {{$cartItems}} --}}
+<script>
+	let cartItems = {{Js::from($cartItems)}};
+
+	function updateCart(e){
+		let form = document.getElementById("update-cart");
+
+		cartItems.map((item) => {
+			let input = document.getElementById(item.id).querySelector('.num-product');
+
+			if(e == 'down'){
+				item.desired_quantity = parseInt(input.value) - 1;
+			} else if (e == 'up'){
+				item.desired_quantity = parseInt(input.value) + 1;
+			} else {
+				item.desired_quantity = parseInt(input.value);
+			}
+
+			// if quantity equals 0, remove the cart item element.
+			if(item.desired_quantity == 0){
+				document.getElementById(item.id).remove();
+			}
+			return item;
+		})
+
+
+		// clear form hidden inputs
+		Array.from(form.children).forEach(item => {
+			if(item.nodeName == 'INPUT' && item.name != '_token'){
+				form.removeChild(item);
+			}
+		})
+
+		// add hidden inputs for cartItems in the form
+		cartItems.forEach(item => {
+			let input = document.createElement('input');
+			input.type = 'hidden';
+			input.name = `cartitems[${item.id}]`;
+			input.value = `${item.desired_quantity}`;
+			form.appendChild(input);
+		})
+	}
+</script>
+
 <x-layout>
 	<!-- breadcrumb -->
 	<div class="container">
@@ -49,10 +91,12 @@
 									Apply coupon
 								</div>
 							</div>
-
-							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-								Update Cart
-							</div>
+							<form id='update-cart' method="POST" action={{route('carts.bulkUpdate')}}>
+								@csrf
+								<button type="submit" class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+									Update Cart
+								</button>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -144,3 +188,4 @@
 		</div>
 	</div>
 </x-layout>
+
