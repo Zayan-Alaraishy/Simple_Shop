@@ -2,21 +2,20 @@
 namespace App\Repositories;
 
 use App\Interfaces\RatingRepositoryInterface;
+use App\Models\Product;
 use App\Models\Rating;
+use Illuminate\Support\Collection;
 
 class RatingRepository implements RatingRepositoryInterface
 {
-    public function getUserRatingForProduct(int $productId, int $userId):Rating
-    {
-        return Rating::where('product_id', $productId)
-            ->where('user_id', $userId)
-            ->first();
-    }
 
-    public function find(int $id): Rating{
+
+    public function find(int $id): Rating
+    {
         return Rating::findOrFail($id);
     }
-    public function create(array $data): Rating{
+    public function create(array $data): Rating
+    {
         return Rating::create($data);
     }
 
@@ -33,6 +32,12 @@ class RatingRepository implements RatingRepositoryInterface
     {
         $rating = $this->find($id);
         $rating->delete();
+    }
+    public function getProductsReviews(int $productId): Collection
+    {
+        return Rating::with('user:id,username')
+            ->where('product_id', $productId)
+            ->get();
     }
 
 }

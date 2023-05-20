@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Interfaces;
+
 use App\Models\Rating;
+use Illuminate\Support\Collection;
 
 interface RatingRepositoryInterface
 {
@@ -12,8 +14,6 @@ interface RatingRepositoryInterface
 
     public function delete(int $id): void;
 
-    public function getUserRatingForProduct(int $productId, int $userId):Rating;
-
-    // public function updateAverageRating(Product $product): float;
-
+    public function getProductsReviews(int $productId):Collection;
+    
 }

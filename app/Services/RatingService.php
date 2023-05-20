@@ -4,52 +4,41 @@ namespace App\Services;
 use App\Interfaces\RatingServiceInterface;
 use App\Models\Rating;
 use App\Repositories\RatingRepository;
+use App\Services\ProductService;
+use Illuminate\Support\Collection;
 use Exception;
 
 
 class RatingService implements RatingServiceInterface 
 {
     protected $ratingRepository;
+    protected $productService;
 
-    public function __construct(RatingRepository $ratingRepository)
+    public function __construct(RatingRepository $ratingRepository, ProductService $productService)
     {
         $this->ratingRepository = $ratingRepository;
+        $this->productService = $productService;
     }
 
-    public function getUserRatingForProduct($product_id, $user_id)
+    
+    public function createRating(array $data): Rating
     {
-        return $this->ratingRepository->getUserRatingForProduct($product_id, $user_id);
+        $rating =  $this->ratingRepository->create($data);
+        $this->productService->updateProductAverageRating($rating->product_id);
+        return $rating;
     }
 
-    public function createRating(array $data, $currentUser): Rating
+    public function updateRating(int $ratingId, array $data): Rating
     {
-        if ($data['user_id'] != $currentUser) {
-            throw new Exception("You are not authorized to create this rating.");
-        }
-        $data["user_id"] = $currentUser;
-        return $this->ratingRepository->create($data);
-    }
-
-    public function updateRating($ratingId, array $data, $currentUser): Rating
-    {
-        $rating = $this->ratingRepository->find($ratingId);
-
-        if ($rating->user_id != $currentUser) {
-            throw new Exception("You are not authorized to update this rating.");
-        }
-
-
         return $this->ratingRepository->update($ratingId, $data);
     }
 
-    public function deleteRating($ratingId, $currentUser): void
+    public function deleteRating($ratingId): void
     {
-        $rating = $this->ratingRepository->find($ratingId);
-
-        if ($rating->user_id != $currentUser) {
-            throw new Exception("You are not authorized to delete this rating.");
-        }
-
         $this->ratingRepository->delete($ratingId);
+    }
+    public function getProductsReviews($productId):Collection
+    {
+        return $this->ratingRepository->getProductsReviews($productId);
     }
 }

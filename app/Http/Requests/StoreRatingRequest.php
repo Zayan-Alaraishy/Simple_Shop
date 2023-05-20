@@ -24,7 +24,8 @@ class StoreRatingRequest extends FormRequest
         return [
             'product_id' => 'required',
             'rating' => 'required_without:comment|integer|min:1|max:5',
-            'comment' => 'required_without:rating|text',
+            'comment' => 'required_without:rating|string',
         ];
+        
     }
 }

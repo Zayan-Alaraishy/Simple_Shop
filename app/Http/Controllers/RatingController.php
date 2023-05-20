@@ -21,11 +21,16 @@ class RatingController extends Controller
 
     public function store(StoreRatingRequest $request)
     {
-
         $validatedData = $request->validated();
-        $userId = Auth::user()->id;
-        $Rating = $this->ratingService->createRating($validatedData, $userId);
-        return response()->json($Rating, 201);
+        $loggedInUser = Auth::user();
+
+        if (!$loggedInUser) {
+            return back()->with('status', 'You are not authorized to create rating. Please log in.');
+        }
+
+        $validatedData["user_id"] = $loggedInUser->id;
+        $Rating = $this->ratingService->createRating($validatedData);
+        return back()->with('status', 'Thanks for the review!');
 
     }
 
@@ -33,9 +38,18 @@ class RatingController extends Controller
     public function update(UpdateRatingRequest $request, Rating $rating)
     {
         $validatedData = $request->validated();
-        $currentUser = Auth::user()->id;
-        $ratingId = Auth::user()->id;
-        $rating = $this->ratingService->updateRating($ratingId, $validatedData, $currentUser);
+        $loggedInUser = Auth::user();
+
+        if (!$loggedInUser) {
+            return back()->with('status', 'You are not authorized to update this rating. Please log in.');
+        }
+        
+        if ($loggedInUser->id != $rating->user_id) {
+            return back()->with('status', 'You are not authorized to update this rating.');
+        }
+
+        $ratingId = $rating->id;
+        $rating = $this->ratingService->updateRating($ratingId, $validatedData);
         return response()->json($rating);
 
     }
@@ -43,9 +57,19 @@ class RatingController extends Controller
 
     public function destroy(Rating $rating)
     {
-        $ratingId = $rating["id"];
-        $currentUser = Auth::user()->id;
-        $this->ratingService->deleteRating($ratingId, $currentUser);
+        dd($rating);
+        $loggedInUser = Auth::user();
+
+        if (!$loggedInUser) {
+            return back()->with('status', 'You are not authorized to delete this rating. Please log in.');
+        }
+        
+        if ($loggedInUser->id != $rating->user_id) {
+            return back()->with('status', 'You are not authorized to delete this rating.');
+        }
+
+        $ratingId = $rating->id;
+        $this->ratingService->deleteRating($ratingId);
 
         return response()->json(null, 204);
     }
