@@ -26,7 +26,7 @@ class ProductFactory extends Factory
             'category_id' => rand(1, $categoriesCount),
             'unit_price' => $this->faker->randomFloat(2, 0, 100),
             'visibility' => $this->faker->boolean(),
-            'average_rating' => null,
+            'average_rating' => rand(1,5),
             'stock' => $this->faker->numberBetween(0, 100),
             'images' => [],
         ];
