@@ -5,8 +5,7 @@ use App\Interfaces\RatingServiceInterface;
 use App\Models\Rating;
 use App\Repositories\RatingRepository;
 use App\Services\ProductService;
-use Illuminate\Support\Collection;
-use Exception;
+use Illuminate\Contracts\Pagination\Paginator;
 
 
 class RatingService implements RatingServiceInterface 
@@ -37,7 +36,7 @@ class RatingService implements RatingServiceInterface
     {
         $this->ratingRepository->delete($ratingId);
     }
-    public function getProductsReviews($productId):Collection
+    public function getProductsReviews($productId):Paginator
     {
         return $this->ratingRepository->getProductsReviews($productId);
     }

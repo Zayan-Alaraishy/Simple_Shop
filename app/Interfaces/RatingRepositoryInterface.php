@@ -3,7 +3,7 @@
 namespace App\Interfaces;
 
 use App\Models\Rating;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\Paginator;
 
 interface RatingRepositoryInterface
 {
@@ -14,6 +14,6 @@ interface RatingRepositoryInterface
 
     public function delete(int $id): void;
 
-    public function getProductsReviews(int $productId):Collection;
+    public function getProductsReviews(int $productId):Paginator;
     
 }

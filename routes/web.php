@@ -34,9 +34,9 @@ Route::get('/products/edit', [ProductController::class, 'edit']);
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-Route::post('/products/{id}/ratings', [RatingController::class, 'store'])->name('products.ratings.store');
-Route::put('/products/{id}/ratings/{rating}', [RatingController::class, 'update'])->name('products.ratings.update');
-Route::delete('/products/{id}/ratings/{rating}', [RatingController::class, 'destroy'])->name('products.ratings.destroy');
+Route::post('/products/{id}/ratings', [RatingController::class, 'store'])->name('products.ratings.store')->middleware(['auth', 'verified']);
+Route::put('/products/{id}/ratings/{rating}', [RatingController::class, 'update'])->name('products.ratings.update')->middleware(['auth', 'verified']);
+Route::delete('/products/{id}/ratings/{rating}', [RatingController::class, 'destroy'])->name('products.ratings.destroy')->middleware(['auth', 'verified']);
 
 
 Route::prefix('/auth')->group(function () {

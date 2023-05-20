@@ -22,13 +22,8 @@ class RatingController extends Controller
     public function store(StoreRatingRequest $request)
     {
         $validatedData = $request->validated();
-        $loggedInUser = Auth::user();
-
-        if (!$loggedInUser) {
-            return back()->with('status', 'You are not authorized to create rating. Please log in.');
-        }
-
-        $validatedData["user_id"] = $loggedInUser->id;
+        $user = Auth::user();
+        $validatedData["user_id"] = $user->id;
         $Rating = $this->ratingService->createRating($validatedData);
         return back()->with('status', 'Thanks for the review!');
 
@@ -38,13 +33,9 @@ class RatingController extends Controller
     public function update(UpdateRatingRequest $request, Rating $rating)
     {
         $validatedData = $request->validated();
-        $loggedInUser = Auth::user();
+        $user = Auth::user();
 
-        if (!$loggedInUser) {
-            return back()->with('status', 'You are not authorized to update this rating. Please log in.');
-        }
-        
-        if ($loggedInUser->id != $rating->user_id) {
+        if (!$user->can('update', $rating)) {
             return back()->with('status', 'You are not authorized to update this rating.');
         }
 
@@ -57,14 +48,9 @@ class RatingController extends Controller
 
     public function destroy(Rating $rating)
     {
-        dd($rating);
-        $loggedInUser = Auth::user();
+        $user = Auth::user();
 
-        if (!$loggedInUser) {
-            return back()->with('status', 'You are not authorized to delete this rating. Please log in.');
-        }
-        
-        if ($loggedInUser->id != $rating->user_id) {
+        if (!$user->can('destroy', $rating)) {
             return back()->with('status', 'You are not authorized to delete this rating.');
         }
 

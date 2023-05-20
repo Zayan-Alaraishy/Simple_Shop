@@ -135,7 +135,7 @@
                                    {{ $product->description }}
                                </p>
                                <!--Rating average-->
-                            
+
                                <span class="fs-18 cl11">
                                    @for ($i = 1; $i <= 5; $i++)
                                        @if ($i <= $product->average_rating)
@@ -239,7 +239,9 @@
                                                @foreach ($productReviews as $review)
                                                    <x-review :review="$review" />
                                                @endforeach
-
+                                               {{-- <div class="flex-c-m flex-w w-full p-t-45">
+                                                   {{ $productReviews->links() }}
+                                               </div> --}}
                                                <!-- Add review -->
                                                <form class="w-full" method="post"
                                                    action="{{ route('products.ratings.store', ['id' => $product->id]) }}">
@@ -266,7 +268,7 @@
                                                            <i class="item-rating pointer zmdi zmdi-star-outline"></i>
                                                            <i class="item-rating pointer zmdi zmdi-star-outline"></i>
                                                            <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                           <input class="dis-none" type="number" name="rating" >
+                                                           <input class="dis-none" type="number" name="rating">
                                                        </span>
                                                    </div>
 

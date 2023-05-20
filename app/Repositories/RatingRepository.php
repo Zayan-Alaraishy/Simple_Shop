@@ -2,9 +2,8 @@
 namespace App\Repositories;
 
 use App\Interfaces\RatingRepositoryInterface;
-use App\Models\Product;
 use App\Models\Rating;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class RatingRepository implements RatingRepositoryInterface
 {
@@ -33,11 +32,11 @@ class RatingRepository implements RatingRepositoryInterface
         $rating = $this->find($id);
         $rating->delete();
     }
-    public function getProductsReviews(int $productId): Collection
+    public function getProductsReviews(int $productId): Paginator
     {
         return Rating::with('user:id,username')
             ->where('product_id', $productId)
-            ->get();
+            ->simplePaginate(10);
     }
 
 }

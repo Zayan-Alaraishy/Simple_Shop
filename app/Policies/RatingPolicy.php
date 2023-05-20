@@ -37,15 +37,15 @@ class RatingPolicy
      */
     public function update(User $user, Rating $rating): bool
     {
-        //
+        return $user->id === $rating->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Rating $rating): bool
+    public function destroy(User $user, Rating $rating): bool
     {
-        //
+        return $user->id === $rating->user_id;
     }
 
     /**
