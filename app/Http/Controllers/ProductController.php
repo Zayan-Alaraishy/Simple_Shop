@@ -67,7 +67,7 @@ class ProductController extends Controller
         $message = '';
 
         try {
-    
+
             $this->productService->saveProduct($request->validated());
             $message = 'Your product has been added!';
         } catch (\Exception $e) {
@@ -88,15 +88,20 @@ class ProductController extends Controller
 
         $product = $this->productService->getProductById($id);
 
-        $user_review = $this->ratingService->getUserRatingForProduct($id, auth()->id());
+        $productReviews = $this->ratingService->getProductsReviews($id);
 
         $isAdmin = Auth::check() && Auth::user()->isAdmin();
 
         if ($isAdmin) {
-            return view('products.admin_show')->with('product', $product);
+            return view('products.admin_show')->with(['product' => $product, 'productReviews' => $productReviews]);
 
         } else {
-            return view('products.customer_show')->with('product', $product);
+            return view('products.customer_show')
+                ->with([
+                    'product' => $product,
+                    'productReviews' => $productReviews
+                ]);
+            
         }
     }
 

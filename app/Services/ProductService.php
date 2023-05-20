@@ -57,4 +57,10 @@ class ProductService implements ProductServiceInterface
     {
         return $this->productRepository->getProducts($category, $name, $sortBy, $perPage);
     }
+
+    public function updateProductAverageRating(int $productId): void
+    {
+        $this->productRepository->updateAverageRating($productId);
+    }
+
 }
