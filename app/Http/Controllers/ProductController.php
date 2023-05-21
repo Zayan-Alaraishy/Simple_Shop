@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
+use App\Services\RatingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +18,7 @@ class ProductController extends Controller
 
     protected $productService;
     protected $categoryService;
+    protected $ratingService;
 
     /**
      * ProductController Constructor
@@ -24,10 +26,11 @@ class ProductController extends Controller
      * @param ProductService $productService
      *
      */
-    public function __construct(ProductService $productService, CategoryService $categoryService)
+    public function __construct(ProductService $productService, CategoryService $categoryService, RatingService $ratingService)
     {
         $this->productService = $productService;
         $this->categoryService = $categoryService;
+        $this->ratingService = $ratingService;
     }
     /**
      * Display a listing of the resource.
@@ -64,7 +67,7 @@ class ProductController extends Controller
         $message = '';
 
         try {
-    
+
             $this->productService->saveProduct($request->validated());
             $message = 'Your product has been added!';
         } catch (\Exception $e) {
@@ -85,13 +88,20 @@ class ProductController extends Controller
 
         $product = $this->productService->getProductById($id);
 
+        $productReviews = $this->ratingService->getProductsReviews($id);
+
         $isAdmin = Auth::check() && Auth::user()->isAdmin();
 
         if ($isAdmin) {
-            return view('products.admin_show')->with('product', $product);
+            return view('products.admin_show')->with(['product' => $product, 'productReviews' => $productReviews]);
 
         } else {
-            return view('products.customer_show')->with('product', $product);
+            return view('products.customer_show')
+                ->with([
+                    'product' => $product,
+                    'productReviews' => $productReviews
+                ]);
+            
         }
     }
 

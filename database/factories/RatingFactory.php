@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,14 @@ class RatingFactory extends Factory
      */
     public function definition(): array
     {
+        $productsCount = Product::count();
+        $usersCount = User::count();
+        
         return [
-            //
+            'product_id' => $this->faker->numberBetween(1, $productsCount),
+            'user_id' => $this->faker->numberBetween(1, $usersCount),
+            'rating' => $this->faker->numberBetween(1, 5),
+            'comment' => $this->faker->paragraph,
         ];
     }
 }

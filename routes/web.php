@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\Profile\ProfileController;
 
 /*
@@ -20,15 +21,23 @@ use App\Http\Controllers\Profile\ProfileController;
 
 
 
-Route::name('home')->group(function(){
+Route::name('home')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/home', [ProductController::class, 'index']);
 });
 
 
+// Route::post('/product/{id}/rate', [RatingController::class, 'store'])->name('product.rate.store');
+
+
+Route::get('/products/edit', [ProductController::class, 'edit']);
 Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified', 'admin']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::post('/products/{id}/ratings', [RatingController::class, 'store'])->name('products.ratings.store')->middleware(['auth', 'verified']);
+Route::put('/products/{id}/ratings/{rating}', [RatingController::class, 'update'])->name('products.ratings.update')->middleware(['auth', 'verified']);
+Route::delete('/products/{id}/ratings/{rating}', [RatingController::class, 'destroy'])->name('products.ratings.destroy')->middleware(['auth', 'verified']);
+
 
 Route::prefix('/auth')->group(function () {
     Route::get('/signup', [AuthController::class, 'index'])->name('signup');
