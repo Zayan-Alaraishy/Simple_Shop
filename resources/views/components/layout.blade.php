@@ -277,12 +277,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 		/*---------------------------------------------*/
 
-		$('.js-addcart-detail').each(function(){
-			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-			$(this).on('click', function(){
-				swal(nameProduct, "is added to cart !", "success");
-			});
-		});
+		// $('.js-addcart-detail').each(function(){
+		// 	var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+		// 	$(this).on('click', function(){
+		// 		swal(nameProduct, "is added to cart !", "success");
+		// 	});
+		// });
 	
 	</script>
 <!--===============================================================================================-->
@@ -311,6 +311,25 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	@if (session('status'))
 	<script>
 		var status = {{Js::from(session('status'))}}
+		var error = {{Js::from(session('error'))}}
+		if(status) {
+			swal({
+				title: "Success",
+				text: status,
+				type: "success",
+				timer: 1500
+			});
+		} else {
+			swal({
+				title: "Error",
+				text: error,
+				type: "error",
+				timer: 1500
+			});
+		}
+	</script>
+	{{-- <script>
+		var status = {{Js::from(session('status'))}}
 			Toastify({
 				text: status,
 				duration: 3000,
@@ -327,7 +346,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				},
 				onClick: function(){} // Callback after click
 			}).showToast();
-	  </script>
+	  </script> --}}
 	
 	@endif
 
