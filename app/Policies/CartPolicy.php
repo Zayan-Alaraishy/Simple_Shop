@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Http\Requests\UpdateCartRequest;
 use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -41,6 +42,7 @@ class CartPolicy
                 Response::allow()
                :Response::deny('You do not own this cart item');
     }
+
 
     /**
      * Determine whether the user can delete the model.

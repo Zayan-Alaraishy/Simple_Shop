@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreCartRequest;
 use App\Http\Requests\UpdateCartRequest;
 
@@ -41,7 +42,6 @@ class CartController extends Controller
             return redirect(route('carts.index'))
                 ->with('error', 'Failed to add the product to the cart');
         }
-
         
     }
 
@@ -69,18 +69,18 @@ class CartController extends Controller
 
     public function bulkUpdate(UpdateCartRequest $request)
     {
-        // $this->authorize('update', $cart);
-        // try {
+        Gate::authorize('bulk-update', $request);
+
+        try {
             $cartItems = $request->input('cartitems');
-            // dd($cartItems);
             $this->cartService->bulkUpdate($cartItems);
             return redirect(route('carts.index'))
                 ->with('status', 'Cart updated successfully'); 
 
-        // } catch (\Exception $e) {
-        //     return redirect(route('carts.index'))
-        //         ->with('error', 'Failed to update cart'); 
-        // }
+        } catch (\Exception $e) {
+            return redirect(route('carts.index'))
+                ->with('error', 'Failed to update cart'); 
+        }
     }
 
     /**

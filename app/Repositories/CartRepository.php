@@ -32,7 +32,6 @@ class CartRepository implements CartRepositoryInterface
 
     public function create(array $item)
     {
-        // dd($item);
         return Cart::create($item);
     }
 

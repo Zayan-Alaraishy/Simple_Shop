@@ -10,21 +10,11 @@
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        Help &amp; FAQs
-                    </a>
                     @auth
                         <a href={{route('profile', auth()->user()->id)}} class="flex-c-m trans-04 p-lr-25">
-                            My Account
+                            My Profile
                         </a>
                     @endauth
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        EN
-                    </a>
-
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        USD
-                    </a>
                 </div>
             </div>
         </div>
@@ -33,7 +23,7 @@
             <nav class="limiter-menu-desktop container">
                 
                 <!-- Logo desktop -->		
-                <a href="#" class="logo">
+                <a href={{route("home")}} class="logo">
                     <img src="{{asset('images/icons/logo-01.png')}}" alt="IMG-LOGO">
                 </a>
 
@@ -97,7 +87,7 @@
     <div class="wrap-header-mobile">
         <!-- Logo moblie -->		
         <div class="logo-mobile">
-            <a href="index.html"><img src="{{asset('images/icons/logo-01.png')}}" alt="IMG-LOGO"></a>
+            <a href={{route('home')}}><img src="{{asset('images/icons/logo-01.png')}}" alt="IMG-LOGO"></a>
         </div>
 
         <!-- Icon header -->
@@ -134,7 +124,7 @@
             <li>
                 <div class="right-top-bar flex-w h-full">
                     @auth
-                        <a href="#" class="flex-c-m p-lr-10 trans-04">
+                        <a href={{route('profile', auth()->user()->id)}} class="flex-c-m trans-04 p-lr-25">
                             My Profile
                         </a>
                     @endauth
