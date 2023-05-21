@@ -16,7 +16,7 @@
                         </div>
 
                         <div class="bg0 m-b-12">
-                            <x-textarea name="description">{{ old('description') !== null? old('description'): 'Description' }}</x-textarea>
+                            <x-textarea name="description" placeholder="Description">{{trim(old('description'))}}</x-textarea>
                             @error('description')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
@@ -60,7 +60,7 @@
                             <label for="images">Images</label>
                             <input type="file" name="images[]" multiple accept="image/*">
                             @error('images')
-                                <span class="error">{{ $message }}</span>
+                                <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
                     </div>
