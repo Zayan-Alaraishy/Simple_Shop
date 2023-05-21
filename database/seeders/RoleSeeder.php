@@ -5,13 +5,16 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class Role extends Seeder
+use App\Models\Role;
+
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        //
+        Role::factory()->create(['name' => 'super admin']);
+        Role::factory()->create(['name' => 'admin']);
     }
 }

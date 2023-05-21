@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
@@ -46,6 +48,15 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     ];
 
     /**
+     * Determine if the user has the super admin role.
+     *
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        return $this->roles()->where('name', 'super admin')->exists();
+    }
+    /**
      * Determine if the user has the admin role.
      *
      * @return bool
@@ -63,4 +74,18 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->belongsToMany(Role::class, 'roles_users');
     }
 
+    public function createSuperAdmin(array $details)
+    {
+        $user = new self($details);
+        $user->save();
+
+        $superAdminRole = Role::where('name', 'super admin')->first();
+
+        if ($superAdminRole) {
+            $user->roles()->attach($superAdminRole->id);
+        }
+
+        return $user;
+
+    }
 }
