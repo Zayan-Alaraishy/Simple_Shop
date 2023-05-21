@@ -3,77 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
+use App\Interfaces\CartServiceInterface;
+use App\Interfaces\OrderItemServicesInterface;
 use App\Interfaces\OrdersServicesInterface;
-use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
 
     protected OrdersServicesInterface $ordersServices;
+    protected CartServiceInterface $cartService;
+    protected OrderItemServicesInterface $orderItemServices;
 
-    public function __construct(OrdersServicesInterface $ordersServices)
-    {
+    public function __construct(
+        OrdersServicesInterface $ordersServices,
+        CartServiceInterface $cartService,
+        OrderItemServicesInterface $orderItemServices
+    ) {
         $this->ordersServices = $ordersServices;
+        $this->cartService = $cartService;
+        $this->orderItemServices = $orderItemServices;
     }
 
-    public function create()
-    {
-
-        return view('checkout');
-    }
 
     public  function confirm_page($id)
     {
-
-        return view('order_confirmation');
+        $orderDetails = $this->ordersServices->getAllOrderDetails($id);
+        return view('order_confirmation', compact('orderDetails'));
     }
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreOrderRequest $request)
     {
-        $total_price = $request['total_price'];
-        $received_money = $request['received_money'];
+        try {
 
-        if (!$this->ordersServices->isPaymentSuccessful($total_price, $received_money)) {
-            return back()->with('status', 'Please check your payment');
+            $userId = auth()->user()->id;
+            $moneyReceived = $request->money_received;
+            $cartItems = $this->cartService->getUserCartItems($userId);
+            $totalPrice = $this->cartService->calculateCartTotal($userId);
+
+            if ($cartItems->first() == null) {
+                return back()->with('emptyCart', 'There are no items in your cart !');
+            }
+
+            if (!$this->ordersServices->isPaymentSuccessful($totalPrice, $moneyReceived)) {
+                return back()->with('status', 'Please check your payment');
+            }
+
+            $productsWithValidQuantity  = $this->ordersServices->quantityInStock($cartItems->toArray());
+            if (is_array($productsWithValidQuantity)) {
+                return back()->with('out_of_stock', $productsWithValidQuantity);
+            }
+
+            $orderDetails = $request->validated();
+
+            DB::beginTransaction();
+
+            $order =  $this->ordersServices->store($orderDetails, $totalPrice, $userId);
+
+            $this->orderItemServices->store($cartItems, $order->id);
+
+            $this->cartService->clear($userId);
+            DB::commit();
+            return redirect()->route('confirm_order', ['id' => $order->id]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Operation Failed, try again later');
         }
-
-        $order =  $this->ordersServices->store($request->validated());
-
-        return redirect('confirm-order/' . $order->id);
-
-        /**
-         * Display the specified resource.
-         */
-    }
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateOrderRequest $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
     }
 }

@@ -92,7 +92,8 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::resource('/orders', OrderController::class)->middleware(['auth','verified']);
+Route::post('/orders', [OrderController::class, 'store'])->Middleware(['auth','verified'])->name('orders.store');
+
 
 Route::get('/confirm-order/{id}', [OrderController::class,'confirm_page'])->Middleware(['auth','verified'])->name('confirm_order');
 

@@ -52,6 +52,9 @@ class CartRepository implements CartRepositoryInterface
         Cart::destroy($id);
     }
 
+    public function clear($userId) {
+        Cart::where('user_id', $userId)->delete();
+    }
     public function getUserCartItems($userId)
     {
         return Cart::where('user_id', $userId)->with('product')->get();

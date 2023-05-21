@@ -4,46 +4,70 @@ namespace App\Services;
 
 use App\Interfaces\OrdersRepositoryInterface;
 use App\Interfaces\OrdersServicesInterface;
-use Illuminate\Support\Facades\Auth;
+use App\Interfaces\ProductServiceInterface;
 
 class OrdersServices implements OrdersServicesInterface
 {
 
-    protected OrdersRepositoryInterface $OrdersRepository;
-    public function __construct(OrdersRepositoryInterface $OrdersRepository)
-    {
-        $this->OrdersRepository = $OrdersRepository;
+    protected OrdersRepositoryInterface $ordersRepository;
+    protected ProductServiceInterface $productServices;
+    public function __construct(
+        OrdersRepositoryInterface $ordersRepository,
+        ProductServiceInterface $productServices
+    ) {
+        $this->ordersRepository = $ordersRepository;
+        $this->productServices = $productServices;
     }
 
-    public function store($details)
+    public function store($orderDetails, $totalPrice, $userId)
     {
-        $address = $this->extractAddress($details);
-        $details['address'] = $address;
-        // This just an example, until Yazeed finished
-        $details['total_price'] = 55;
-        $details['user_id'] = Auth::user()->id;
+        $address = $this->extractAddress($orderDetails);
+        $order = [
+            'address' => $address,
+            'user_id' => $userId,
+            'total_price' => $totalPrice,
+            'payment_method' => $orderDetails['payment_method'],
+            'money_received' => $orderDetails['money_received']
+        ];
 
-        $order = $this->OrdersRepository->create($details);
+        $order = $this->ordersRepository->create($order);
+
         return $order;
     }
 
     private function extractAddress($details)
     {
-        $street = $details['street'];
-        $city = $details['city'];
-        $state = $details['state'];
-
-        $address = $street . ', ' . $city . ', ' . $state;
+        $address = $details['street'] . ', ' . $details['city'] . ', ' . $details['state'];
 
         return $address;
     }
-    function isPaymentSuccessful($totalPrice, $receivedMoney)
+    public function isPaymentSuccessful($totalPrice, $receivedMoney)
     {
-        if ($totalPrice == $receivedMoney) {
-            return true;
-        } else {
-            return false;
-        }
+        $epsilon = 0.0001; // Adjust the tolerance level as needed
+
+       return abs($totalPrice - $receivedMoney) < $epsilon;
+
     }
 
+    public function quantityInStock($productsToValidate)
+    {
+        $outOfStockProducts = [];
+
+        foreach ($productsToValidate as $productToValidate) {
+
+            $product = $this->productServices->getProductById($productToValidate['product_id']);
+
+            if (!$product || $productToValidate['desired_quantity'] > $product->stock) {
+                array_push($outOfStockProducts, ["id" => $productToValidate['id'], "stock" => $product->stock]);
+            }
+        }
+        return  count($outOfStockProducts) ? $outOfStockProducts : true;
+    }
+
+
+
+    public function getAllOrderDetails($id)
+    {
+        return $this->ordersRepository->getOrdersDetails($id);
+    }
 }
