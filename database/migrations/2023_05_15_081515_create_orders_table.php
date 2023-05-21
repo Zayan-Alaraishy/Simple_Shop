@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->integer('total_price');
             $table->string('address');
             $table->string('payment_method');
-            $table->double('money_recived');
+            $table->double('money_received');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 

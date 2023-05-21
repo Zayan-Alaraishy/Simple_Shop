@@ -4,37 +4,50 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Interfaces\OrdersServicesInterface;
 use App\Models\Order;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    protected OrdersServicesInterface $ordersServices;
+
+    public function __construct(OrdersServicesInterface $ordersServices)
     {
-        //
+        $this->ordersServices = $ordersServices;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+
+        return view('checkout');
     }
 
+    public  function confirm_page($id)
+    {
+
+        return view('order_confirmation');
+    }
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreOrderRequest $request)
     {
-        //
-    }
+        $total_price = $request['total_price'];
+        $received_money = $request['received_money'];
 
-    /**
-     * Display the specified resource.
-     */
+        if (!$this->ordersServices->isPaymentSuccessful($total_price, $received_money)) {
+            return back()->with('status', 'Please check your payment');
+        }
+
+        $order =  $this->ordersServices->store($request->validated());
+
+        return redirect('confirm-order/' . $order->id);
+
+        /**
+         * Display the specified resource.
+         */
+    }
     public function show(Order $order)
     {
         //
