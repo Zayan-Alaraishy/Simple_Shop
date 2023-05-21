@@ -73,4 +73,16 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->hasMany(OrderItem::class);
     }
 
+    public function cartItems()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+
 }

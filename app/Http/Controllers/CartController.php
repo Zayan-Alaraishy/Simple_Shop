@@ -2,26 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\Product;
+use App\Services\CartService;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreCartRequest;
 use App\Http\Requests\UpdateCartRequest;
-use App\Models\Cart;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(protected CartService $cartService) { }
+
     public function index()
     {
-        //
-    }
+        $userId = auth()->user()->id;
+        $cartItems = $this->cartService->getUserCartItems($userId);
+        $cartTotal = $this->cartService->calculateCartTotal($userId);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('cart', compact('cartItems', 'cartTotal'));
     }
 
     /**
@@ -29,23 +27,22 @@ class CartController extends Controller
      */
     public function store(StoreCartRequest $request)
     {
-        //
-    }
+        try {
+            $validated = $request->validated();
+            $userId = auth()->user()->id;
+            $productId = $validated['product_id'];
+            $desiredQuantity = $validated['desired_quantity'];
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cart $cart)
-    {
-        //
+            $this->cartService->create($userId, $productId, $desiredQuantity);
+            
+            return redirect(route('carts.index'))
+                ->with('status', ' Product added to the cart'); 
+           
+        } catch (\Exception $e) {
+            return redirect(route('carts.index'))
+                ->with('error', 'Failed to add the product to the cart');
+        }
+        
     }
 
     /**
@@ -53,7 +50,37 @@ class CartController extends Controller
      */
     public function update(UpdateCartRequest $request, Cart $cart)
     {
-        //
+        $this->authorize('update', $cart);
+
+        try {
+            $validated = $request->validated();
+            $desiredQuantity = $validated['desired_quantity'];
+
+            $this->cartService->update($cart->id, $desiredQuantity);
+            
+            return redirect(route('carts.index'))
+                ->with('status', 'Product item updated successfully'); 
+
+        } catch (\Exception $e) {
+            return redirect(route('carts.index'))
+                ->with('error', 'Failed to update the product in cart'); 
+        }
+    }
+
+    public function bulkUpdate(UpdateCartRequest $request)
+    {
+        Gate::authorize('bulk-update', $request);
+
+        try {
+            $cartItems = $request->input('cartitems');
+            $this->cartService->bulkUpdate($cartItems);
+            return redirect(route('carts.index'))
+                ->with('status', 'Cart updated successfully'); 
+
+        } catch (\Exception $e) {
+            return redirect(route('carts.index'))
+                ->with('error', 'Failed to update cart'); 
+        }
     }
 
     /**
@@ -61,6 +88,16 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        //
+        $this->authorize('delete', $cart);
+
+        try {
+           $this->cartService->delete($cart->id);
+            
+            return redirect(route('carts.index'))
+            ->with('status', 'Product item deleted successfully'); 
+        } catch (\Exception $e) {
+            return redirect(route('carts.index'))
+                ->with('error', 'Failed to delete the product from the car'); 
+        }
     }
 }

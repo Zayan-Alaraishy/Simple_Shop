@@ -18,17 +18,13 @@ class CartFactory extends Factory
      */
     public function definition(): array
     {
+        // $product = Product::factory()->make();
+
         return [
-            'product_id' => function () {
-                return Product::inRandomOrder()->first()->id;
-            },
-            'user_id' => function () {
-                return User::inRandomOrder()->first()->id;
-            },
-            'desired_quantity' => $this->faker->numberBetween(1,10),
-            'unit_price' => $this->faker->randomFloat(2, 0, 100),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'product_id' => Product::factory(),
+            'user_id' => User::factory(),
+            'desired_quantity' =>  rand(1, 10),
+            'unit_price' =>  $this->faker->randomFloat(2, 0, 100)
         ];
     }
 }

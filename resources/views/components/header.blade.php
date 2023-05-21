@@ -1,3 +1,4 @@
+
 <header class="header-v4">
     <!-- Header desktop -->
     <div class="container-menu-desktop">
@@ -9,21 +10,11 @@
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        Help &amp; FAQs
-                    </a>
                     @auth
                         <a href={{route('profile', auth()->user()->id)}} class="flex-c-m trans-04 p-lr-25">
-                            My Account
+                            My Profile
                         </a>
                     @endauth
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        EN
-                    </a>
-
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        USD
-                    </a>
                 </div>
             </div>
         </div>
@@ -32,7 +23,7 @@
             <nav class="limiter-menu-desktop container">
                 
                 <!-- Logo desktop -->		
-                <a href="#" class="logo">
+                <a href={{route("home")}} class="logo">
                     <img src="{{asset('images/icons/logo-01.png')}}" alt="IMG-LOGO">
                 </a>
 
@@ -43,11 +34,6 @@
                         <li class="active-menu">
                             <a href="{{route('home')}}">Home</a>
                         </li>
-
-                        <li class="label1" data-label1="hot">
-                            <a href="shoping-cart.html">Features</a>
-                        </li>
-
 
                         <li>
                             <a href="{{route('about')}}">About</a>
@@ -70,9 +56,6 @@
                         <i class="zmdi zmdi-shopping-cart"></i>
                     </div>
 
-                    <a href="#" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
-                        <i class="zmdi zmdi-favorite-outline"></i>
-                    </a>
                     <li>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
@@ -104,7 +87,7 @@
     <div class="wrap-header-mobile">
         <!-- Logo moblie -->		
         <div class="logo-mobile">
-            <a href="index.html"><img src="{{asset('images/icons/logo-01.png')}}" alt="IMG-LOGO"></a>
+            <a href={{route('home')}}><img src="{{asset('images/icons/logo-01.png')}}" alt="IMG-LOGO"></a>
         </div>
 
         <!-- Icon header -->
@@ -112,14 +95,12 @@
             <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
                 <i class="zmdi zmdi-search"></i>
             </div>
+            @auth()
+                <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="2">
+                    <i class="zmdi zmdi-shopping-cart"></i>
+                </div>
+            @endauth
 
-            <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="2">
-                <i class="zmdi zmdi-shopping-cart"></i>
-            </div>
-
-            <a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify="0">
-                <i class="zmdi zmdi-favorite-outline"></i>
-            </a>
         </div>
 
         <!-- Button show menu -->
@@ -142,21 +123,11 @@
 
             <li>
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        Help &amp; FAQs
-                    </a>
                     @auth
-                        <a href="#" class="flex-c-m p-lr-10 trans-04">
-                            My Account
+                        <a href={{route('profile', auth()->user()->id)}} class="flex-c-m trans-04 p-lr-25">
+                            My Profile
                         </a>
                     @endauth
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        EN
-                    </a>
-
-                    <a href="#" class="flex-c-m p-lr-10 trans-04">
-                        USD
-                    </a>
                 </div>
             </li>
         </ul>
@@ -164,10 +135,6 @@
         <ul class="main-menu-m">
             <li class="active-menu">
                 <a href="{{route('home')}}">Home</a>
-            </li>
-
-            <li class="label1" data-label1="hot">
-                <a href="shoping-cart.html">Features</a>
             </li>
 
 
@@ -178,6 +145,23 @@
             <li>
                 <a href="{{route('contact')}}">Contact</a>
             </li>
+            @auth
+            <li>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="cl2 hov-cl1 trans-04 p-l-22 p-r-11">Logout</button>
+                </form>
+            </li>
+            @endauth
+            @guest
+                <li>
+                    <a href="{{route('login')}}">Login</a>
+                </li>
+
+                <li>
+                    <a href="{{route('signup')}}">Signup</a>
+                </li>
+            @endguest
         </ul>
     </div>
 
@@ -197,3 +181,20 @@
         </div>
     </div>
 </header>
+
+@if(isset($cartItems))
+    <script>
+        let count = {{Js::from(count($cartItems))}}
+
+        let notifyElement = document.querySelector('.icon-header-noti');
+        const styleElement = document.createElement('style');
+
+        styleElement.textContent = `
+        .icon-header-noti::after {
+            content: '${count}' !important;
+        }
+        `;
+
+        document.head.appendChild(styleElement);
+    </script>
+@endif

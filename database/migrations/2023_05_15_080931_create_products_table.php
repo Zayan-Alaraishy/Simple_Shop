@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('category_id');
             $table->double('unit_price');
             $table->boolean('visibility')->default(true);
-            $table->double('average_rating')->nullable();
+            $table->integer('average_rating')->nullable();
             $table->integer('stock');
             $table->json('images')->nullable();
             $table->timestamps();

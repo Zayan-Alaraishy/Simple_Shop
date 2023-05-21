@@ -70,6 +70,10 @@
                                 <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'unit_price']) }}"
                                 class="{{ request('sort_by') == 'unit_price' ? 'active-link' : '' }} filter-link stext-106 trans-04">Price: Low to High</a>
                             </li>
+                            <li class="p-b-6">
+                                <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'average_rating']) }}"
+                                class="{{ request('sort_by') == 'average_rating' ? 'active-link' : '' }} filter-link stext-106 trans-04">Ratings</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
