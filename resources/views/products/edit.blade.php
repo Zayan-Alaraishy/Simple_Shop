@@ -64,7 +64,7 @@
                             <label for="images">Images</label>
                             <input type="file" name="images[]" multiple accept="image/*">
                             @error('images')
-                                <span class="error">{{ $message }}</span>
+                                <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
                     </div>
