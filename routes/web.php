@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RatingController;
@@ -88,6 +89,7 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::view('/about', 'about')->name('about');
-Route::view('/cart', 'cart')->name('cart');
 Route::view('/contact', 'contact')->name('contact');
-Route::view('/products/{product}', 'products.product-detail')->name('product');
+
+Route::resource('/carts', CartController::class)->except(['create','show','edit'])->middleware(['auth', 'verified']);
+Route::post('/carts/bulk', [CartController::class, 'bulkUpdate'])->middleware(['auth', 'verified'])->name('carts.bulkUpdate');

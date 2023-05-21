@@ -1,8 +1,54 @@
+<script>
+	let cartItems = {{Js::from($cartItems)}};
+	window.addEventListener('load', () => {
+		updateCart();
+	});
+
+	function updateCart(e){
+		let form = document.getElementById("update-cart");
+
+		cartItems.map((item) => {
+			let input = document.getElementById(item.id).querySelector('.num-product');
+
+			if(e == 'down'){
+				item.desired_quantity = parseInt(input.value) - 1;
+			} else if (e == 'up'){
+				item.desired_quantity = parseInt(input.value) + 1;
+			} else {
+				item.desired_quantity = parseInt(input.value);
+			}
+
+			// if quantity equals 0, remove the cart item element.
+			if(item.desired_quantity == 0){
+				document.getElementById(item.id).remove();
+			}
+			return item;
+		})
+
+
+		// clear form hidden inputs
+		Array.from(form.children).forEach(item => {
+			if(item.nodeName == 'INPUT' && item.name != '_token'){
+				form.removeChild(item);
+			}
+		})
+
+		// add hidden inputs for cartItems in the form
+		cartItems.forEach(item => {
+			let input = document.createElement('input');
+			input.type = 'hidden';
+			input.name = `cartitems[${item.id}]`;
+			input.value = `${item.desired_quantity}`;
+			form.appendChild(input);
+		})
+	}
+</script>
+
 <x-layout>
 	<!-- breadcrumb -->
 	<div class="container">
 		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-			<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+			<a href="{{route('home')}}" class="stext-109 cl8 hov-cl1 trans-04">
 				Home
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
@@ -15,7 +61,7 @@
 		
 
 	<!-- Shoping Cart -->
-	<form class="bg0 p-t-75 p-b-85">
+	<div class="bg0 p-t-75 p-b-85">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -23,32 +69,30 @@
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart">
 								<tr class="table_head">
+									<th></th>
 									<th class="column-1">Product</th>
 									<th class="column-2"></th>
 									<th class="column-3">Price</th>
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
-
-								<x-cart-row />
-								<x-cart-row />
-								<x-cart-row />
-								
+								@isset($cartItems)
+									@forelse ($cartItems as $cartItem )
+										<x-cart-row :cartItem="$cartItem"/>	
+									@empty
+										</tr>Your Cart is Empty</tr>
+									@endforelse
+								@endisset
 							</table>
 						</div>
 
-						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-							<div class="flex-w flex-m m-r-20 m-tb-5">
-								<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
-									
-								<div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-									Apply coupon
-								</div>
-							</div>
-
-							<div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-								Update Cart
-							</div>
+						<div class="flex-w bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm w-full">
+							<form id='update-cart' method="POST" action={{route('carts.bulkUpdate')}} class="flex-row flex-r w-full">
+								@csrf
+								<button type="submit" class="stext-101 cl2 size-117 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+									Update Cart
+								</button>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -68,7 +112,7 @@
 
 							<div class="size-209">
 								<span class="mtext-110 cl2">
-									$79.65
+									${{$cartTotal}}
 								</span>
 							</div>
 						</div>
@@ -138,12 +182,6 @@
 				</div>
 			</div>
 		</div>
-	</form>
-		
+	</div>
 </x-layout>
 
-
-	
-		
-
-	
