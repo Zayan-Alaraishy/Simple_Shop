@@ -64,31 +64,25 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $message = '';
-
         try {
-
             $this->productService->saveProduct($request->validated());
-            $message = 'Your product has been added!';
-        } catch (\Exception $e) {
-            dd($e);
-            dd("Hello");
-            $message = 'Failed to create this product!';
-        }
 
-        return redirect('/products')
-            ->with('message', $message);
+            return redirect(route('products.index'))
+                ->with('status', 'Your product has been added!');
+        } catch (\Exception $e) {
+            return redirect(route('products.create'))
+            ->with('error', 'Failed to add the product!');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
+        $product = $this->productService->getProductById($product->id);
 
-        $product = $this->productService->getProductById($id);
-
-        $productReviews = $this->ratingService->getProductsReviews($id);
+        $productReviews = $this->ratingService->getProductsReviews($product->id);
 
         $isAdmin = Auth::check() && Auth::user()->isAdmin();
 
@@ -109,9 +103,9 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Product $product)
     {
-        $product = $this->productService->getProductById($id);
+        $product = $this->productService->getProductById($product->id);
         $categories = $this->categoryService->getAllCategories();
 
         return view('products.edit')
@@ -124,38 +118,33 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, string $id)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $message = '';
-
         try {
-            $this->productService->updateProductById($id, $request->validated());
+            $this->productService->updateProductById($product->id, $request->validated());
 
-            $message = 'Your product has been updated!';
+            return redirect(route('products.show', $product))
+            ->with('status', 'Your product has been updated!');
         } catch (\Exception $e) {
-            $message = 'Failed to update the product!';
+            return redirect(route('products.edit', $product))
+            ->with('error', 'Failed to update the product!');
         }
-
-        return redirect('/products/' . $id)
-            ->with('message', $message);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        $message = '';
-
         try {
-            $this->productService->deleteProductById($id);
-            $message = "Your product has been deleted!";
+            $this->productService->deleteProductById($product->id);
+
+            return redirect(route('products.index'))
+            ->with('status', 'Your product has been deleted!');
 
         } catch (\Exception $e) {
-            $message = "Failed to delete this product!";
+            return redirect(route('products.show', $product))
+            ->with('error', 'Failed to delete this product!');
         }
-
-        return back()
-            ->with('message', $message);
     }
 }
