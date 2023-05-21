@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Interfaces\AuthServiceInterface;
+use App\Services\AuthServices;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -24,11 +26,14 @@ class RegisterSuperAdminCommand extends Command
      *
      * @return void
      */
-    public function __construct(User $user)
+    protected AuthServiceInterface $authServices;
+
+    public function __construct(User $user, AuthServices $authServices)
     {
         parent::__construct();
 
         $this->user = $user;
+        $this->authServices = $authServices;
     }
 
     /**
@@ -45,7 +50,16 @@ class RegisterSuperAdminCommand extends Command
             return;
         }
 
-        $super_admin = $this->user->createSuperAdmin($details);
+        $user = $this->authServices->signup(
+            $details['email'],
+            $details['username'],
+            $details['password']
+        );
+
+        $this->info('A verification email has been sent to this email');
+
+        $super_admin = $this->user->signAsSuperAdmin($user);
+
         $this->display($super_admin);
     }
 
@@ -66,6 +80,8 @@ class RegisterSuperAdminCommand extends Command
             $this->error('Invalid email');
             return [];
         }
+
+
 
         $details['password'] = $this->secret('Password');
         $details['confirm_password'] = $this->secret('Confirm password');

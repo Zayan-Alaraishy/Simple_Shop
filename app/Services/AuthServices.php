@@ -25,7 +25,8 @@ class AuthServices implements AuthServiceInterface
         $hashPassword = Hash::make($password);
         $user = $this->authRepository->create($email, $username, $hashPassword);
         dispatch(new SendEmailVerificationNotification($user));
-        return auth()->login($user);
+        auth()->login($user);
+        return auth()->user(); // Retrieve the currently authenticated user
     }
 
 
@@ -47,12 +48,12 @@ class AuthServices implements AuthServiceInterface
                 $user->forceFill([
                     'password' => Hash::make($password)
                 ])->setRememberToken(Str::random(60));
-     
+
                 $user->save();
-     
+
                 event(new PasswordReset($user));
             }
         );
-   return $status;
+        return $status;
     }
 }
