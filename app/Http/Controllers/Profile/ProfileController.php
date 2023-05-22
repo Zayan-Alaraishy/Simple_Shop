@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateAddressRequest;
-use App\Http\Requests\updateEmailRequest;
-use App\Http\Requests\updateUsernameRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Interfaces\ProfileServiceInterface;
 use Illuminate\Support\Facades\Auth;
-
 
 class ProfileController extends Controller
 {
@@ -23,7 +20,7 @@ class ProfileController extends Controller
     {
         $user = $this->profileService->findUserById((int) $id);
 
-        return view('profile.profile' , [
+        return view('profile.profile', [
             'username' => $user->username,
             'email' => $user->email,
             'isPublic' => $user->is_public,
@@ -32,49 +29,37 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function updateEmail(updateEmailRequest $request)
+    public function updateProfile(UpdateProfileRequest $request)
     {
         $user = Auth::user();
         $this->authorize('update', $user);
+    
         try {
-            $this->profileService->updateEmail($user, $request->email);
-            return back()->with('status', 'Email updated successfully');
-        } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
-        }
-    }
-
-    public function updateUsername(updateUsernameRequest $request)
-    {
-        $user = Auth::user();
-        $this->authorize('update', $user);
-        try {
-            $this->profileService->updateUsername($user, $request->username);
-            return back()->with('status', 'Username updated successfully');
-        } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
-        }
-    }
-
-    public function updateAddress(UpdateAddressRequest $request)
-    {
-        $user = Auth::user();
-        $this->authorize('update', $user);
-        
-        $country = $request->input('country') ?? '';
-        $city = $request->input('city') ?? '';
-        $street = $request->input('street') ?? '';
-        
-        try {
-            $this->profileService->updateAddress($user, $country, $city, $street);
-            return back()->with('status', 'Address updated successfully');
+            $email = $request->input('email');
+            $username = $request->input('username');
+    
+            if (!empty($email) && $email !== $user->email) {
+                $this->profileService->updateEmail($user, $email);
+            }
+    
+            if (!empty($username) && $username !== $user->username) {
+                $this->profileService->updateUsername($user, $username);
+            }
+    
+            if ($request->filled('country') || $request->filled('city') || $request->filled('street')) {
+                $country = $request->input('country') ?? '';
+                $city = $request->input('city') ?? '';
+                $street = $request->input('street') ?? '';
+                $this->profileService->updateAddress($user, $country, $city, $street);
+            }
+    
+            return back()->with('status', 'Profile updated successfully');
         } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());
         }
     }
     
     
-
     public function toggleAccountPrivacy()
     {
         $user = Auth::user();

@@ -86,11 +86,10 @@ Route::prefix('/email')->group(function () {
 
 Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/{id}', [ProfileController::class, 'profilePage'])->name('profile');
-    Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
-    Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
+    Route::put('/update-profile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
     Route::post('/toggle-account-privacy', [ProfileController::class, 'toggleAccountPrivacy'])->name('toggleAccountPrivacy');
-    Route::put('/update-address', [ProfileController::class, 'updateAddress'])->name('updateAddress');
 });
+
 
 
 Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth','verified'])->name('orders');
