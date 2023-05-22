@@ -25,114 +25,58 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-lg-7 p-b-30">
-                    <div class="p-l-25 p-r-30 p-lr-0-lg">
-                        <div class="wrap-slick3 flex-sb flex-w">
-                            <div class="wrap-slick3-dots">
+					<div class="p-l-25 p-r-30 p-lr-0-lg">
+						<div class="wrap-slick3 flex-sb flex-w">
+							<div class="wrap-slick3-dots">
                                 <ul class="slick3-dots" role="tablist" style="">
                                     <li class="slick-active" role="presentation">
-                                        @if (isset($product->images[0]))
-                                            <img src="{{ asset('storage/' . $product->images[0]) }}" alt="IMG-PRODUCT">
-                                        @else
-                                            <img src={{ asset('images/product-detail-01.jpg') }} alt="IMG-PRODUCT">
-                                        @endif
-
-
+                                        <x-product-image index='2' :product="$product" class="product-details-slick"/>
                                         <div class="slick3-dot-overlay"></div>
                                     </li>
                                     <li role="presentation">
-                                        @if (isset($product->images[0]))
-                                            <img src="{{ asset('storage/' . $product->images[0]) }}" alt="IMG-PRODUCT">
-                                        @else
-                                            <img src={{ asset('images/product-detail-01.jpg') }} alt="IMG-PRODUCT">
-                                        @endif
+                                        <x-product-image index='3' :product="$product" class="product-details-slick"/>
                                         <div class="slick3-dot-overlay"></div>
                                     </li>
-                                    <li>
-                                    @if (isset($product->images[0]))
-                                        <img src="{{ asset('storage/' . $product->images[0]) }}" alt="IMG-PRODUCT">
-                                    @else
-                                        <img src={{ asset('images/product-detail-01.jpg') }} alt="IMG-PRODUCT">
-                                    @endif
-                                    <div class="slick3-dot-overlay"></div>
+                                    <li role="presentation">
+                                        <x-product-image index='4' :product="$product" class="product-details-slick"/>
+                                        <div class="slick3-dot-overlay"></div>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="wrap-slick3-arrows flex-sb-m flex-w"><button
-                                    class="arrow-slick3 prev-slick3 slick-arrow" style=""><i
-                                        class="fa fa-angle-left" aria-hidden="true"></i></button><button
-                                    class="arrow-slick3 next-slick3 slick-arrow" style=""><i
-                                        class="fa fa-angle-right" aria-hidden="true"></i></button></div>
+							<div class="wrap-slick3-arrows flex-sb-m flex-w"><button class="arrow-slick3 prev-slick3 slick-arrow" style=""><i class="fa fa-angle-left" aria-hidden="true"></i></button><button class="arrow-slick3 next-slick3 slick-arrow" style=""><i class="fa fa-angle-right" aria-hidden="true"></i></button></div>
 
-                            <div class="slick3 gallery-lb slick-initialized slick-slider slick-dotted">
-                                <div class="slick-list draggable">
-                                    <div class="slick-track" style="opacity: 1; width: 1083px;">
-                                        <div class="item-slick3 slick-slide slick-current slick-active"
-                                            data-thumb="images/product-detail-01.jpg" data-slick-index="0"
-                                            aria-hidden="false" tabindex="0" role="tabpanel" id="slick-slide10"
-                                            aria-describedby="slick-slide-control10"
-                                            style="width: 361px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
-                                            <div class="wrap-pic-w pos-relative">
-
-                                                @if (isset($product->images[0]))
-                                                    <img src="{{ asset('storage/' . $product->images[0]) }}"
-                                                        alt="IMG-PRODUCT">
-                                                @else
-                                                    <img src={{ asset('images/product-detail-01.jpg') }}
-                                                        alt="IMG-PRODUCT">
-                                                @endif
+							<div class="slick3 gallery-lb slick-initialized slick-slider slick-dotted">
+								<div class="slick-list draggable"><div class="slick-track" style="opacity: 1; width: 1083px;"><div class="item-slick3 slick-slide slick-current slick-active" data-thumb="images/product-detail-01.jpg" data-slick-index="0" aria-hidden="false" tabindex="0" role="tabpanel" id="slick-slide10" aria-describedby="slick-slide-control10" style="width: 361px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
+									<div class="wrap-pic-w pos-relative">
+                                        <x-product-image index='0' :product="$product" class="product-details-image"/>
 
 
-                                                <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                                                    href="{{ asset('images/product-detail-01.jpg') }}" tabindex="0">
-                                                    <i class="fa fa-expand"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="item-slick3 slick-slide"
-                                            data-thumb="{{ asset('images/product-detail-02.jpg') }}"
-                                            data-slick-index="1" aria-hidden="true" tabindex="-1" role="tabpanel"
-                                            id="slick-slide11" aria-describedby="slick-slide-control11"
-                                            style="width: 361px; position: relative; left: -361px; top: 0px; z-index: 998; opacity: 0;">
-                                            <div class="wrap-pic-w pos-relative">
-                                                @if (isset($product->images[1]))
-                                                    <img src="{{ asset('storage/' . $product->images[1]) }}"
-                                                        alt="IMG-PRODUCT">
-                                                @else
-                                                    <img src={{ asset('images/product-detail-01.jpg') }}
-                                                        alt="IMG-PRODUCT">
-                                                @endif
-                                                <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                                                    href="{{ asset('images/product-detail-02.jpg') }} tabindex="-1">
-                                                    <i class="fa fa-expand"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="item-slick3 slick-slide"
-                                            data-thumb="{{ asset('images/product-detail-03.jpg') }}"
-                                            data-slick-index="2" aria-hidden="true" tabindex="-1" role="tabpanel"
-                                            id="slick-slide12" aria-describedby="slick-slide-control12"
-                                            style="width: 361px; position: relative; left: -722px; top: 0px; z-index: 998; opacity: 0;">
-                                            <div class="wrap-pic-w pos-relative">
-                                                @if (isset($product->images[2]))
-                                                    <img src="{{ asset('storage/' . $product->images[2]) }}"
-                                                        alt="IMG-PRODUCT">
-                                                @else
-                                                    <img src={{ asset('images/product-detail-03.jpg') }}
-                                                        alt="IMG-PRODUCT">
-                                                @endif
-                                                <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                                                    href="{{ asset('images/product-detail-03.jpg') }} tabindex="-1">
-                                                    <i class="fa fa-expand"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('images/product-detail-01.jpg')}}" tabindex="0">
+											<i class="fa fa-expand"></i>
+										</a>
+									</div>
+								</div><div class="item-slick3 slick-slide" data-thumb="{{asset('images/product-detail-02.jpg')}}" data-slick-index="1" aria-hidden="true" tabindex="-1" role="tabpanel" id="slick-slide11" aria-describedby="slick-slide-control11" style="width: 361px; position: relative; left: -361px; top: 0px; z-index: 998; opacity: 0;">
+									<div class="wrap-pic-w pos-relative">
+                                        <x-product-image index='1' :product="$product" />
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('images/product-detail-02.jpg')}} tabindex="-1">
+											<i class="fa fa-expand"></i>
+										</a>
+									</div>
+								</div><div class="item-slick3 slick-slide" data-thumb="{{asset('images/product-detail-03.jpg')}}" data-slick-index="2" aria-hidden="true" tabindex="-1" role="tabpanel" id="slick-slide12" aria-describedby="slick-slide-control12" style="width: 361px; position: relative; left: -722px; top: 0px; z-index: 998; opacity: 0;">
+									<div class="wrap-pic-w pos-relative">
+                                        <x-product-image index='0' :product="$product" />
+                                        
+										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('images/product-detail-03.jpg')}} tabindex="-1">
+											<i class="fa fa-expand"></i>
+										</a>
+									</div>
+								</div></div></div>
+
+							</div>
+						</div>
+					</div>
+				</div>
 
                 <div class="col-md-6 col-lg-5 p-b-30">
                     <div class="p-r-50 p-t-5 p-lr-0-lg">
@@ -172,6 +116,29 @@
                             @endfor
                         </span>
                         <!--  -->
+                        @if($product->stock > 2)
+                            <div class="size-204 flex-w flex-m respon6-next">
+                                <form action="{{route('carts.store')}}" method="POST">
+                                    @csrf
+                                    <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                            <i class="fs-16 zmdi zmdi-minus"></i>
+                                        </div>
+
+                                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="desired_quantity" value="1">
+
+                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                            <i class="fs-16 zmdi zmdi-plus"></i>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="product_id" value="{{$product->id}}" />
+                                    <button type="submit" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                        Add to cart
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
 
                         <div class="size-204 flex-w flex-m respon6-next">
                             <div class="w-full flex-row m-r-20 m-tb-10">
@@ -190,6 +157,7 @@
                                 </form>
                             </div>
                         </div>
+
                         <!--  -->
 
                         <!--  -->
