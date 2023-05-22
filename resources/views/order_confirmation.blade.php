@@ -15,19 +15,38 @@
 
 
     <!-- Shoping Cart -->
-    <div class="bg0 p-t-75 p-b-85">
-        <div style="display: flex; justify-content:center; align-items:center; gap:20px; margin-bottom:30px;">
-            <p>Total Price</p>
-            <x-input type="text" style="width:10%" value="{{ $orderDetails->first()->total_price }}" readonly />
-            <p>Order Date</p>
-            <x-input type="text" style="width:10%" value="{{ $orderDetails->first()->created_at->format('Y-m-d') }}"
-                readonly />
-            <p>Payment Method</p>
-            <x-input type="text" style="width:10%" value="{{ $orderDetails->first()->payment_method }}" readonly />
-            <p>Money Received</p>
-            <x-input type="text" style="width:10%" readonly value="{{ $orderDetails->first()->money_received }}" />
+    <div class="container">
+        <div class="dis-flex flex-col flex-m bor12 p-t-15 p-b-30">
+            <div class="size-210 p-r-18 p-r-0-sm w-full-ssm">
+                <h4 class="mtext-105 cl2 js-name-detail p-b-14 txt-center">
+                    Order Details
+                </h4>
+                <div class="p-t-15 row">
+                    <div class="col">
+                        <div class="bg0 m-b-12">
+                            <p>Total Price</p>
+                            <x-input type="text" value="{{ $orderDetails->first()->total_price }}" readonly />
+                        </div>
+                        <div class="bg0 m-b-12">
+                            <p>Order Date</p>
+                            <x-input type="text" value="{{ $orderDetails->first()->created_at->format('Y-m-d') }}"
+                                readonly />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="bg0 m-b-12">
+                            <p>Payment Method</p>
+                            <x-input type="text" value="{{ $orderDetails->first()->payment_method }}" readonly />
+                        </div>
+                        <div class="bg0 m-b-12">
+                            <p>Money Received</p>
+                            <x-input type="text" readonly value="{{ $orderDetails->first()->money_received }}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
+    </div>
 
         <div class="container">
             <div class="row">
@@ -38,6 +57,7 @@
                                 <tr class="table_head">
                                     <th></th>
                                     <th class="column-1">Product</th>
+                                    <th class="column-2"></th>
                                     <th class="column-3">Price</th>
                                     <th class="column-4">Quantity</th>
                                     <th class="column-5">Total</th>

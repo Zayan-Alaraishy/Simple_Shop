@@ -6,6 +6,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Interfaces\CartServiceInterface;
 use App\Interfaces\OrderItemServicesInterface;
 use App\Interfaces\OrdersServicesInterface;
+use App\Interfaces\ProductServiceInterface;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -15,16 +16,29 @@ class OrderController extends Controller
     protected CartServiceInterface $cartService;
     protected OrderItemServicesInterface $orderItemServices;
 
+    protected ProductServiceInterface $productServices;
     public function __construct(
         OrdersServicesInterface $ordersServices,
         CartServiceInterface $cartService,
-        OrderItemServicesInterface $orderItemServices
+        OrderItemServicesInterface $orderItemServices,
+        ProductServiceInterface $productServices,
     ) {
         $this->ordersServices = $ordersServices;
         $this->cartService = $cartService;
         $this->orderItemServices = $orderItemServices;
+        $this->productServices = $productServices;
     }
 
+
+
+    public function index()
+    {
+        $orders = $this->ordersServices->getUserOrderHistory();
+
+        // dd($orders->toArray());
+        return view('orders-history', compact('orders'));
+
+    }
 
     public function confirm_page($id)
     {
@@ -63,7 +77,7 @@ class OrderController extends Controller
             $order = $this->ordersServices->store($orderDetails, $totalPrice, $userId);
 
             $this->orderItemServices->store($cartItems, $order->id);
-
+            $this->productServices->updateStockForProduct($cartItems);
             $this->cartService->clear($userId);
             DB::commit();
             return redirect()->route('confirm_order', ['id' => $order->id]);
