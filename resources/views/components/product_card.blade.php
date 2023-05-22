@@ -2,17 +2,13 @@
 
 
 
-<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" style="position: absolute; left: 0%; top: 0px;">
+<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item" style="position: absolute; left: 0%; top: 0px;">
     <!-- Block2 -->
     <div class="block2">
         <div class="block2-pic hov-img0">
-            @if (isset($product->images[0]))
-            <img src="{{ asset('storage/' . $product->images[0]) }}" alt="IMG-PRODUCT">
-        @else
-            <img src={{ asset('images/product-detail-01.jpg') }} alt="IMG-PRODUCT">
-        @endif
+        <x-product-image index='0' :product="$product" />
 
-            <a onclick='quickView("{{$product}}")' href={{route('products.show', $product)}} class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+            <a onclick='quickView("{{$product}}")' href={{route('products.show', $product)}} class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
                 Quick View
             </a>
         </div>
@@ -26,6 +22,8 @@
                 <span class="stext-105 cl3">
                    ${{$product->unit_price}}
                 </span>
+
+				<span class="badge bg-secondary p-1 m-t-4">{{$product->category->name}}</span>
             </div>
 
             <div class="block2-txt-child2 flex-r p-t-3">

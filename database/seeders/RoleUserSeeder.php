@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RoleUserSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class RoleUserSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        User::all()->each(function($user){
+            $user->roles->save(1);
+        });
     }
 }
