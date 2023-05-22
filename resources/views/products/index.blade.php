@@ -27,6 +27,8 @@
                     <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
                     Search
                 </div>
+                <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 ">
+                    <a href="{{ route('products.index')}}" class="cl6">Reset Filters</a>                </div>
             </div>
             
             <!-- Search product -->
@@ -63,8 +65,8 @@
                                 class="{{ request('sort_by') == 'name' ? 'active-link' : '' }} filter-link stext-106 trans-04">Name</a>
                             </li>
                             <li class="p-b-6">
-                                <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'category']) }}"
-                                class="{{ request('sort_by') == 'category' ? 'active-link' : '' }} filter-link stext-106 trans-04">Category</a>
+                                <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'category_id']) }}"
+                                class="{{ request('sort_by') == 'category_id' ? 'active-link' : '' }} filter-link stext-106 trans-04">Category</a>
                             </li>
                             <li class="p-b-6">
                                 <a href="{{ route('products.index', ['category' => request('category'), 'name' => request('name'), 'sort_by' => 'unit_price']) }}"
