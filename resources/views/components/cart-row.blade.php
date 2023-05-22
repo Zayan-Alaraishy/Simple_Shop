@@ -3,19 +3,18 @@
 <tr class="table_row" id={{ $cartItem->id }}>
 
     <td>
-        <form action={{ route('carts.destroy', ['cart' => $cartItem]) }} method="POST">
-            @csrf
-            @method('DELETE')
-
-            <button type='submit' class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m ml-2">
-                <i class="fs-30">&times;</i>
-            </button>
-        </form>
+        <button type='submit' class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m ml-2" onclick="updateCart('zero', {{$cartItem->id}})">
+            <i class="fs-30">&times;</i>
+        </button>
     </td>
     <td class="column-1">
         <a href={{ route('products.show', $cartItem->product) }}>
             <div class="how-itemcart1">
-                <img src="{{ asset('images/item-cart-04.jpg') }}" alt="IMG">
+                @if(isset($cartItem->product->images[0]))
+                <img src="{{ asset('storage/' . $cartItem->product->images[0]) }}" alt="IMG-PRODUCT">
+                @else
+                    <img src={{asset('images/product-detail-01.jpg')}} alt="IMG-PRODUCT">
+                @endif
             </div>
         </a>
     </td>

@@ -86,4 +86,10 @@ class ProductService implements ProductServiceInterface
         $this->productRepository->updateAverageRating($productId);
     }
 
+    public function updateStockForProduct($products)
+    {
+        foreach ($products as $product) {
+            $this->productRepository->updateStock($product->product_id, $product->quantity);
+        }
+    }
 }

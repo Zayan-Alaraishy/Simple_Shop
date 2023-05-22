@@ -4,15 +4,20 @@
         updateCart();
     });
 
-    function updateCart(e) {
+    function updateCart(action, cartItemId) {
         let form = document.getElementById("update-cart");
 
         cartItems.map((item) => {
+            if(item.desired_quantity == 0) return item;
             let input = document.getElementById(item.id).querySelector('.num-product');
-
-            if (e == 'down') {
+            
+            if (action == 'zero' && item.id == cartItemId) {
+                input.value = 0;
+            }
+            
+            if (action == 'down') {
                 item.desired_quantity = parseInt(input.value) - 1;
-            } else if (e == 'up') {
+            } else if (action == 'up') {
                 item.desired_quantity = parseInt(input.value) + 1;
             } else {
                 item.desired_quantity = parseInt(input.value);
@@ -22,6 +27,22 @@
             if (item.desired_quantity == 0) {
                 document.getElementById(item.id).remove();
             }
+            
+            let itemRow = document.getElementById(item.id);
+            if(itemRow){
+                itemTotal = itemRow.querySelector('.column-5');
+                itemTotal.innerHTML = `$ ${(item.desired_quantity * item.unit_price).toFixed(2)}`;
+            }
+            
+
+            let totalDivs = document.querySelectorAll('.mtext-110.cl2');
+
+            totalDivs.forEach(item => {
+                item.innerHTML = cartItems.reduce((acc, item) => {
+                    let total = (acc + (item.unit_price * item.desired_quantity));
+                    return total;
+                }, 0).toFixed(2);
+            })
             return item;
         })
 
@@ -83,7 +104,7 @@
                                         @if (session('emptyCart'))
                                             <x-error>{{ session('emptyCart') }}</x-error>
                                         @endif
-                                        </tr>Your Cart is Empty</tr>
+                                        <tr class="table_row">Your Cart is Empty</tr>
                                     @endforelse
                                 @endisset
                             </table>
@@ -181,7 +202,7 @@
 
                                 <div class="size-209 p-t-1">
                                     <span class="mtext-110 cl2">
-                                        $79.65
+                                        $ ${{ $cartTotal }}
                                     </span>
                                 </div>
                             </div>

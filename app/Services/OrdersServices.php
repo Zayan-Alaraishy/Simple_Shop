@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Interfaces\OrdersRepositoryInterface;
 use App\Interfaces\OrdersServicesInterface;
 use App\Interfaces\ProductServiceInterface;
+use Illuminate\Support\Facades\Auth;
 
 class OrdersServices implements OrdersServicesInterface
 {
@@ -45,8 +46,7 @@ class OrdersServices implements OrdersServicesInterface
     {
         $epsilon = 0.0001; // Adjust the tolerance level as needed
 
-       return abs($totalPrice - $receivedMoney) < $epsilon;
-
+        return abs($totalPrice - $receivedMoney) < $epsilon;
     }
 
     public function quantityInStock($productsToValidate)
@@ -64,6 +64,18 @@ class OrdersServices implements OrdersServicesInterface
         return  count($outOfStockProducts) ? $outOfStockProducts : true;
     }
 
+    public function getUserOrderHistory()
+    {
+        $userId = Auth::user()->id;
+        $orders = null;
+        if (Auth::user()->isAdmin()) {
+            $orders = $this->ordersRepository->getAllOrders();
+
+        } else {
+            $orders =  $this->ordersRepository->getUserOrders($userId);
+        }
+        return $orders;
+    }
 
 
     public function getAllOrderDetails($id)
