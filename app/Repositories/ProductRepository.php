@@ -6,8 +6,8 @@ use App\Models\Product;
 
 use App\Interfaces\ProductRepositoryInterface;
 use App\Models\Rating;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
+
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -56,32 +56,8 @@ class ProductRepository implements ProductRepositoryInterface
         $product->delete();
     }
 
-    public function getProducts($category = null, $name = null, $sortBy = null, $perPage = 10)
+    public function getProducts($query, $perPage)
     {
-        $query = Product::query();
-        if (!(Auth::check() && Auth::user()->isAdmin())) {
-            $query->where('visibility', 1);
-        }
-
-        // if ($category !== null) {
-        //     $query->where('category_id', $category);
-        // }
-
-        if ($category !== null) {
-            $query->whereHas('category', function ($query) use ($category) {
-                $query->where('name', $category);
-            });
-        }
-
-
-        if ($name !== null) {
-            $query->where('name', 'LIKE', '%' . $name . '%');
-        }
-
-        if ($sortBy !== null) {
-            $query->orderBy($sortBy);
-        }
-
         return $query->simplePaginate($perPage);
     }
     public function updateAverageRating($productId)
