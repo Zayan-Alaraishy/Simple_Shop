@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Requests\updateEmailRequest;
 use App\Http\Requests\updateUsernameRequest;
 use App\Interfaces\ProfileServiceInterface;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -21,13 +21,14 @@ class ProfileController extends Controller
 
     public function profilePage($id)
     {
-        $user = $this->profileService->findUserById($id);
+        $user = $this->profileService->findUserById((int) $id);
 
         return view('profile.profile' , [
             'username' => $user->username,
             'email' => $user->email,
             'isPublic' => $user->is_public,
             'userId' => $user->id,
+            'user' => $user,
         ]);
     }
 
@@ -54,6 +55,25 @@ class ProfileController extends Controller
             return back()->withErrors($e->getMessage());
         }
     }
+
+    public function updateAddress(UpdateAddressRequest $request)
+    {
+        $user = Auth::user();
+        $this->authorize('update', $user);
+        
+        $country = $request->input('country') ?? '';
+        $city = $request->input('city') ?? '';
+        $street = $request->input('street') ?? '';
+        
+        try {
+            $this->profileService->updateAddress($user, $country, $city, $street);
+            return back()->with('status', 'Address updated successfully');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
+    }
+    
+    
 
     public function toggleAccountPrivacy()
     {

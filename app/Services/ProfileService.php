@@ -36,4 +36,9 @@ class ProfileService implements ProfileServiceInterface
     {
         return $this->profileRepository->findUserById($id);
     }
+
+    public function updateAddress(User $user, string $country, string $city, string $street): void
+    {
+        $this->profileRepository->updateAddress($user, $country, $city, $street);
+    }
 }

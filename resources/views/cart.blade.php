@@ -139,20 +139,20 @@
                                                 <option value="amex">Amex</option>
                                             </x-select>
                                         </div>
-                                        <x-input type="text" name="state" value="{{ old('state') }}"
+                                        <x-input type="text" name="state" value="{{ old('country' , $user->country) }}"
                                             placeholder='State/ country' style="margin-bottom: 10px;" />
                                         @error('state')
                                             <x-error>{{ $message }}</x-error>
                                         @enderror
 
-                                        <x-input type="text" name="city" value="{{ old('city') }}"
+                                        <x-input type="text" name="city" value="{{ old('city' , $user->city) }}"
                                             placeholder='City' style="margin-bottom: 10px;" />
                                         @error('city')
                                             <x-error>{{ $message }}</x-error>
                                         @enderror
 
 
-                                        <x-input type="text" name="street" value="{{ old('street') }}"
+                                        <x-input type="text" name="street" value="{{ old('street' , $user->street) }}"
                                             placeholder='Street' style="margin-bottom: 10px;" />
                                         @error('street')
                                             <x-error>{{ $message }}</x-error>

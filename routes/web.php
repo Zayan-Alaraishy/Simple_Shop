@@ -89,6 +89,7 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
     Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
     Route::post('/toggle-account-privacy', [ProfileController::class, 'toggleAccountPrivacy'])->name('toggleAccountPrivacy');
+    Route::put('/update-address', [ProfileController::class, 'updateAddress'])->name('updateAddress');
 });
 
 

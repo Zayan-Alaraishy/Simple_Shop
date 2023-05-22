@@ -30,4 +30,12 @@ class ProfileRepository implements ProfileRepositoryInterface
     {
         return User::findOrFail($id);
     }
+
+    public function updateAddress(User $user, string $country, string $city, string $street): void
+    {
+        $user->country = $country;
+        $user->city = $city;
+        $user->street = $street;
+        $user->save();
+    }
 }
