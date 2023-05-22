@@ -36,4 +36,40 @@ class ProfileService implements ProfileServiceInterface
     {
         return $this->profileRepository->findUserById($id);
     }
+
+    public function updateAddress(User $user, string $country, string $city, string $street): void
+    {
+        $this->profileRepository->updateAddress($user, $country, $city, $street);
+    }
+
+    public function updatePassword(User $user, string $password): void
+    {
+        $this->profileRepository->updatePassword($user, $password);
+    }
+    
+    public function updateProfile(User $user, array $data): void
+    {
+        $email = $data['email'] ?? null;
+        $username = $data['username'] ?? null;
+        $password = $data['password'] ?? null;
+
+        if (!empty($email) && $email !== $user->email) {
+            $this->updateEmail($user, $email);
+        }
+
+        if (!empty($username) && $username !== $user->username) {
+            $this->updateUsername($user, $username);
+        }
+
+        if (!empty($password)) {
+            $this->updatePassword($user, $password);
+        }
+
+        if (isset($data['country']) || isset($data['city']) || isset($data['street'])) {
+            $country = $data['country'] ?? '';
+            $city = $data['city'] ?? '';
+            $street = $data['street'] ?? '';
+            $this->updateAddress($user, $country, $city, $street);
+        }
+    }
 }
