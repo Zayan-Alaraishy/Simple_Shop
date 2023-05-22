@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\ProfileRepositoryInterface;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileRepository implements ProfileRepositoryInterface
 {
@@ -17,6 +18,12 @@ class ProfileRepository implements ProfileRepositoryInterface
     public function updateUsername(User $user, string $username): void
     {
         $user->username = $username;
+        $user->save();
+    }
+
+    public function updatePassword(User $user, string $password): void
+    {
+        $user->password = Hash::make($password); // Hash the new password
         $user->save();
     }
 
@@ -39,3 +46,4 @@ class ProfileRepository implements ProfileRepositoryInterface
         $user->save();
     }
 }
+

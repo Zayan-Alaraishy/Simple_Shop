@@ -22,9 +22,9 @@ class UpdateAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'country' => 'required|string',
-            'city' => 'required|string',
-            'street' => 'required|string',
+            'country' => 'nullable|string',
+            'city' => 'nullable|string',
+            'street' => 'nullable|string',
         ];
     }
 }

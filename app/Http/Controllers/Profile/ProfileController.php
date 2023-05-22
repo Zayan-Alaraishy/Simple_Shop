@@ -35,31 +35,14 @@ class ProfileController extends Controller
         $this->authorize('update', $user);
     
         try {
-            $email = $request->input('email');
-            $username = $request->input('username');
-    
-            if (!empty($email) && $email !== $user->email) {
-                $this->profileService->updateEmail($user, $email);
-            }
-    
-            if (!empty($username) && $username !== $user->username) {
-                $this->profileService->updateUsername($user, $username);
-            }
-    
-            if ($request->filled('country') || $request->filled('city') || $request->filled('street')) {
-                $country = $request->input('country') ?? '';
-                $city = $request->input('city') ?? '';
-                $street = $request->input('street') ?? '';
-                $this->profileService->updateAddress($user, $country, $city, $street);
-            }
-    
+            $this->profileService->updateProfile($user, $request->all());
             return back()->with('status', 'Profile updated successfully');
         } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());
         }
     }
     
-    
+
     public function toggleAccountPrivacy()
     {
         $user = Auth::user();

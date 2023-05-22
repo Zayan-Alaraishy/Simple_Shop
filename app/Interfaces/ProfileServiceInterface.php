@@ -11,4 +11,6 @@ interface ProfileServiceInterface
     public function toggleAccountPrivacy(User $user): void;
     public function findUserById(int $id): User;
     public function updateAddress(User $user, string $country, string $city, string $street): void;
+    public function updateProfile(User $user, array $data): void;
+
 }

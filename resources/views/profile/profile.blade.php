@@ -39,31 +39,38 @@
                                 @enderror
                             </div>
 
-                            <div class="bg0 m-b-22">
-                                <label for="country" class="label">Country:</label>
-                                <x-input type="text" name="country" id="country" placeholder="Enter your country" value="{{ old('country', $user->country) }}" />
-                                @error('country')
+                            <div class="m-b-22">
+                                <label for="password" class="label">Password:</label>
+                                <x-input type="password" name="password" id="password" placeholder="Enter your new password" />
+                                @error('password')
                                 <x-error>{{ $message }}</x-error>
                                 @enderror
-                            </div>
 
-                            <div class="bg0 m-b-22">
-                                <label for="city" class="label">City:</label>
-                                <x-input type="text" name="city" id="city" placeholder="Enter your city" value="{{ old('city', $user->city) }}" />
-                                @error('city')
-                                <x-error>{{ $message }}</x-error>
-                                @enderror
-                            </div>
+                                <div class="bg0 m-b-22">
+                                    <label for="country" class="label">Country:</label>
+                                    <x-input type="text" name="country" id="country" placeholder="Enter your country" value="{{ old('country', $user->country) }}" />
+                                    @error('country')
+                                    <x-error>{{ $message }}</x-error>
+                                    @enderror
+                                </div>
 
-                            <div class="bg0 m-b-22">
-                                <label for="street" class="label">Street:</label>
-                                <x-input type="text" name="street" id="street" placeholder="Enter your street" value="{{ old('street', $user->street) }}" />
-                                @error('street')
-                                <x-error>{{ $message }}</x-error>
-                                @enderror
-                            </div>
+                                <div class="bg0 m-b-22">
+                                    <label for="city" class="label">City:</label>
+                                    <x-input type="text" name="city" id="city" placeholder="Enter your city" value="{{ old('city', $user->city) }}" />
+                                    @error('city')
+                                    <x-error>{{ $message }}</x-error>
+                                    @enderror
+                                </div>
 
-                            <x-button type="submit">Update Profile</x-button>
+                                <div class="bg0 m-b-22">
+                                    <label for="street" class="label">Street:</label>
+                                    <x-input type="text" name="street" id="street" placeholder="Enter your street" value="{{ old('street', $user->street) }}" />
+                                    @error('street')
+                                    <x-error>{{ $message }}</x-error>
+                                    @enderror
+                                </div>
+
+                                <x-button type="submit">Update Profile</x-button>
                         </form>
 
                         <hr>
