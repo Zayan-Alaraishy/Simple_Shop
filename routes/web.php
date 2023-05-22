@@ -104,19 +104,14 @@ Route::view('/contact', 'contact')->name('contact');
 
 Route::resource('/carts', CartController::class)->except(['create', 'show', 'edit'])->middleware(['auth', 'verified']);
 Route::post('/carts/bulk', [CartController::class, 'bulkUpdate'])->middleware(['auth', 'verified'])->name('carts.bulkUpdate');
-Route::view('/products/{product}', 'products.product-detail')->name('product');
 
 
-Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'super-admin'], function () {
+Route::group(['middleware' => ['auth', 'super-admin']], function () {
     Route::get('/dashboard', [UsersRolesController::class, 'index'])->name('dashboard');
-    // Route::get('/users', 'SuperAdminController@users');
 
     // Add more routes for managing roles, permissions, and user-role assignments
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'super-admin/dashboard'], function () {
+Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () {
     Route::resource('/permissions', PermissionController::class)->middleware(['auth', 'verified', 'super-admin']);
-    // Route::get('/users', 'SuperAdminController@users');
-
-    // Add more routes for managing roles, permissions, and user-role assignments
 });
