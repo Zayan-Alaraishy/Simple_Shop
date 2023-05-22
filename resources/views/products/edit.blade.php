@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="bg0 m-b-12">
-                            <x-input type="number" name="unit_price" step="0.01" value="{{ $product->unit_price }}" placeholder='Unit Price' />
+                            <x-input type="number" name="unit_price" min="0" step="0.01" value="{{ $product->unit_price }}" placeholder='Unit Price' />
                             @error('unit_price')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="bg0 m-b-12">
-                            <x-input type="number" name="stock" value="{{ $product->stock }}" placeholder="Stock" />
+                            <x-input type="number" name="stock" min="0" value="{{ $product->stock }}" placeholder="Stock" />
                             @error('stock')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
@@ -64,7 +64,7 @@
                             <label for="images">Images</label>
                             <input type="file" name="images[]" multiple accept="image/*">
                             @error('images')
-                                <span class="error">{{ $message }}</span>
+                                <x-error>{{ $message }}</x-error>
                             @enderror
                         </div>
                     </div>

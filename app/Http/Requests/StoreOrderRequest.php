@@ -11,7 +11,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,14 @@ class StoreOrderRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+            'money_received'=>'required|min:1',
+            'payment_method' => 'required',
+            'street' => 'required',
+            'city' => 'required',
+            'state' => 'required',
         ];
     }
+
 }

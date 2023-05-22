@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Role;
+use App\Services\AuthServices;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -74,13 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->belongsToMany(Role::class, 'roles_users');
     }
 
-    public function createSuperAdmin(array $details)
+    public function signAsSuperAdmin(User $user)
     {
-        $user = new self($details);
-        $user->save();
-
         $superAdminRole = Role::where('name', 'super admin')->first();
-
+        echo $superAdminRole->id;
         if ($superAdminRole) {
             $user->roles()->attach($superAdminRole->id);
         }
@@ -88,4 +86,28 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $user;
 
     }
+
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+
 }

@@ -17,8 +17,10 @@ class ProductService implements ProductServiceInterface
 
     public function saveProduct($details)
     {
-        $imagesPath = $this->handleUploadedImages($details['images']);
-        $details['images'] =  $imagesPath;
+        if(isset($details['images'])){
+            $imagesPath = $this->handleUploadedImages($details['images']);
+            $details['images'] =  $imagesPath;
+        }
 
         return $this->productRepository->save($details);
     }
@@ -28,8 +30,10 @@ class ProductService implements ProductServiceInterface
     }
     public function updateProductById($id, $new_details)
     {
-        $imagesPath = $this->handleUploadedImages($new_details['images']);
-        $new_details['images'] = $imagesPath ;
+        if(isset($new_details['images'])){
+            $imagesPath = $this->handleUploadedImages($new_details['images']);
+            $new_details['images'] = $imagesPath ;
+        }
         return $this->productRepository->update($id, $new_details);
     }
     public function deleteProductById($id)
@@ -55,4 +59,10 @@ class ProductService implements ProductServiceInterface
     {
         return $this->productRepository->getProducts($category, $name, $sortBy, $perPage);
     }
+
+    public function updateProductAverageRating(int $productId): void
+    {
+        $this->productRepository->updateAverageRating($productId);
+    }
+
 }

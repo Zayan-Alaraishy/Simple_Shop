@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\Product;
 
 use App\Interfaces\ProductRepositoryInterface;
+use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
 
 class ProductRepository implements ProductRepositoryInterface
@@ -69,7 +70,7 @@ class ProductRepository implements ProductRepositoryInterface
                 $query->where('name', $category);
             });
         }
-        
+
 
         if ($name !== null) {
             $query->where('name', 'LIKE', '%' . $name . '%');
@@ -80,6 +81,13 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
         return $query->simplePaginate($perPage);
+    }
+    public function updateAverageRating(int $productId): void
+    {
+        $product = Product::find($productId);
+        $averageRating = round(Rating::where('product_id', $productId)->avg('rating'));
+        $product->average_rating = $averageRating;
+        $product->save();
     }
 
 }

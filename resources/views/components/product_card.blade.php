@@ -6,8 +6,11 @@
     <!-- Block2 -->
     <div class="block2">
         <div class="block2-pic hov-img0">
-            <img src="images/product-01.jpg" alt="IMG-PRODUCT">
-            {{-- <img src="{{$product->images[0]}}" alt="IMG-PRODUCT"> --}}
+            @if (isset($product->images[0]))
+            <img src="{{ asset('storage/' . $product->images[0]) }}" alt="IMG-PRODUCT">
+        @else
+            <img src={{ asset('images/product-detail-01.jpg') }} alt="IMG-PRODUCT">
+        @endif
 
             <a onclick='quickView("{{$product}}")' href={{route('products.show', $product)}} class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                 Quick View
@@ -90,7 +93,7 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<div class="col-md-6 col-lg-5 p-b-30">
 						<div class="p-r-50 p-t-5 p-lr-0-lg">
 							<h4 class="mtext-105 cl2 js-name-detail p-b-14">
@@ -104,7 +107,7 @@
 							<p class="stext-102 cl3 p-t-23">
 								Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus ligula. Mauris consequat ornare feugiat.
 							</p>
-							
+
 							<!--  -->
 							<div class="p-t-33">
 								<div class="flex-w flex-r-m p-b-10">
@@ -163,7 +166,7 @@
 											Add to cart
 										</button>
 									</div>
-								</div>	
+								</div>
 							</div>
 
 							<!--  -->
@@ -201,5 +204,5 @@
             console.log(document.querySelector('.js-name-detail').innerHTML);
             document.querySelector('.js-name-detail').innerHTML = productDetail.name;
         }
-    
+
     </script>
