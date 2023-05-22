@@ -63,6 +63,16 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->belongsToMany(Role::class, 'roles_users');
     }
 
+
+    public function orders () {
+        return $this->hasMany(Order::class);
+    }
+
+    public function orderItems ()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function cartItems()
     {
         return $this->hasMany(Cart::class);

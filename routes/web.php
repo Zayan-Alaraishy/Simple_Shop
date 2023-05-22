@@ -1,13 +1,16 @@
 <?php
 
 
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +90,12 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
     Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
     Route::post('/toggle-account-privacy', [ProfileController::class, 'toggleAccountPrivacy'])->name('toggleAccountPrivacy');
 });
+
+
+Route::post('/orders', [OrderController::class, 'store'])->Middleware(['auth','verified'])->name('orders.store');
+
+
+Route::get('/confirm-order/{id}', [OrderController::class,'confirm_page'])->Middleware(['auth','verified'])->name('confirm_order');
 
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');

@@ -3,64 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
-use App\Models\Order;
+use App\Interfaces\CartServiceInterface;
+use App\Interfaces\OrderItemServicesInterface;
+use App\Interfaces\OrdersServicesInterface;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+
+    protected OrdersServicesInterface $ordersServices;
+    protected CartServiceInterface $cartService;
+    protected OrderItemServicesInterface $orderItemServices;
+
+    public function __construct(
+        OrdersServicesInterface $ordersServices,
+        CartServiceInterface $cartService,
+        OrderItemServicesInterface $orderItemServices
+    ) {
+        $this->ordersServices = $ordersServices;
+        $this->cartService = $cartService;
+        $this->orderItemServices = $orderItemServices;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
+    public  function confirm_page($id)
+    {
+        $orderDetails = $this->ordersServices->getAllOrderDetails($id);
+        return view('order_confirmation', compact('orderDetails'));
+    }
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreOrderRequest $request)
     {
-        //
-    }
+        try {
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
+            $userId = auth()->user()->id;
+            $moneyReceived = $request->money_received;
+            $cartItems = $this->cartService->getUserCartItems($userId);
+            $totalPrice = $this->cartService->calculateCartTotal($userId);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
+            if ($cartItems->first() == null) {
+                return back()->with('emptyCart', 'There are no items in your cart !');
+            }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateOrderRequest $request, Order $order)
-    {
-        //
-    }
+            if (!$this->ordersServices->isPaymentSuccessful($totalPrice, $moneyReceived)) {
+                return back()->with('status', 'Please check your payment');
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
+            $productsWithValidQuantity  = $this->ordersServices->quantityInStock($cartItems->toArray());
+            if (is_array($productsWithValidQuantity)) {
+                return back()->with('out_of_stock', $productsWithValidQuantity);
+            }
+
+            $orderDetails = $request->validated();
+
+            DB::beginTransaction();
+
+            $order =  $this->ordersServices->store($orderDetails, $totalPrice, $userId);
+
+            $this->orderItemServices->store($cartItems, $order->id);
+
+            $this->cartService->clear($userId);
+            DB::commit();
+            return redirect()->route('confirm_order', ['id' => $order->id]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Operation Failed, try again later');
+        }
     }
 }

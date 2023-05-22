@@ -18,7 +18,7 @@
         </span>
     </div>
 	</div>
-		
+
 
 	<!-- Product Detail -->
 	<section class="sec-product-detail bg0 p-t-65 p-b-60">
@@ -34,11 +34,11 @@
 								<div class="slick-list draggable"><div class="slick-track" style="opacity: 1; width: 1083px;"><div class="item-slick3 slick-slide slick-current slick-active" data-thumb="images/product-detail-01.jpg" data-slick-index="0" aria-hidden="false" tabindex="0" role="tabpanel" id="slick-slide10" aria-describedby="slick-slide-control10" style="width: 361px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
 									<div class="wrap-pic-w pos-relative">
                                         @if(isset($product->images[0]))
-										    <img src="{{Storage::url($product->images[0])}}" alt="IMG-PRODUCT">
+										    <img src="{{ asset('storage/' . $product->images[0]) }}" alt="IMG-PRODUCT">
                                         @else
 										    <img src={{asset('images/product-detail-01.jpg')}} alt="IMG-PRODUCT">
                                         @endif
-                                        
+
 
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('images/product-detail-01.jpg')}}" tabindex="0">
 											<i class="fa fa-expand"></i>
@@ -47,10 +47,10 @@
 								</div><div class="item-slick3 slick-slide" data-thumb="{{asset('images/product-detail-02.jpg')}}" data-slick-index="1" aria-hidden="true" tabindex="-1" role="tabpanel" id="slick-slide11" aria-describedby="slick-slide-control11" style="width: 361px; position: relative; left: -361px; top: 0px; z-index: 998; opacity: 0;">
 									<div class="wrap-pic-w pos-relative">
                                         @if(isset($product->images[1]))
-										    <img src="{{Storage::url($product->images[1])}}" alt="IMG-PRODUCT">
-                                        @else
-										    <img src={{asset('images/product-detail-01.jpg')}} alt="IMG-PRODUCT">
-                                        @endif
+                                        <img src="{{ asset('storage/' . $product->images[1]) }}" alt="IMG-PRODUCT">
+                                    @else
+                                        <img src={{asset('images/product-detail-01.jpg')}} alt="IMG-PRODUCT">
+                                    @endif
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('images/product-detail-02.jpg')}} tabindex="-1">
 											<i class="fa fa-expand"></i>
 										</a>
@@ -58,21 +58,21 @@
 								</div><div class="item-slick3 slick-slide" data-thumb="{{asset('images/product-detail-03.jpg')}}" data-slick-index="2" aria-hidden="true" tabindex="-1" role="tabpanel" id="slick-slide12" aria-describedby="slick-slide-control12" style="width: 361px; position: relative; left: -722px; top: 0px; z-index: 998; opacity: 0;">
 									<div class="wrap-pic-w pos-relative">
                                         @if(isset($product->images[2]))
-										    <img src="{{Storage::url($product->images[2])}}" alt="IMG-PRODUCT">
-                                        @else
-										    <img src={{asset('images/product-detail-03.jpg')}} alt="IMG-PRODUCT">
-                                        @endif
+                                        <img src="{{ asset('storage/' . $product->images[2]) }}" alt="IMG-PRODUCT">
+                                    @else
+                                        <img src={{asset('images/product-detail-01.jpg')}} alt="IMG-PRODUCT">
+                                    @endif
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('images/product-detail-03.jpg')}} tabindex="-1">
 											<i class="fa fa-expand"></i>
 										</a>
 									</div>
 								</div></div></div>
-								
+
 							</div>
 						</div>
 					</div>
 				</div>
-					
+
 				<div class="col-md-6 col-lg-5 p-b-30">
 					<div class="p-r-50 p-t-5 p-lr-0-lg">
 						<h4 class="mtext-105 cl2 js-name-detail p-b-14">
@@ -91,7 +91,7 @@
 									<span style="color: purple;">Hurry, we have {{$product->stock}} items left.<span>
 								@else
 									<span style="color: red;">Out of Stock<span>
-								@endif		
+								@endif
 							@endif
 						</p>
 

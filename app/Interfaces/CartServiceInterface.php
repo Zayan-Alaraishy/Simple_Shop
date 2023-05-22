@@ -11,4 +11,6 @@ interface CartServiceInterface
     public function getUserCartItems($userId);
     public function calculateCartTotal($userId);
     public function bulkUpdate(array $cartItems);
+
+    public function clear($array);
 }

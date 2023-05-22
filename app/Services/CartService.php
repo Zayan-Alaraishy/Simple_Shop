@@ -10,9 +10,9 @@ class CartService implements CartServiceInterface
 {
 
     public function __construct(
-        protected CartRepository $cartRepository, 
+        protected CartRepository $cartRepository,
         protected ProductRepository $productRepository){}
-        
+
     public function getById($id)
     {
         return $this->cartRepository->getById($id);
@@ -21,7 +21,7 @@ class CartService implements CartServiceInterface
     public function create($userId, $productId, $desired_quantity)
     {
         $cartItem = $this->cartRepository->getByUserAndProduct($userId, $productId);
-        
+
         // If exists, update it
         if($cartItem){
             return $this->update($cartItem->id, $desired_quantity);
@@ -59,6 +59,9 @@ class CartService implements CartServiceInterface
         $this->cartRepository->delete($id);
     }
 
+    public function clear($userId) {
+        return $this->cartRepository->clear($userId);
+    }
 
     public function getUserCartItems($userId)
     {
