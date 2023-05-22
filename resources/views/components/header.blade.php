@@ -13,6 +13,9 @@
                         <a href={{ route('profile', auth()->user()->id) }} class="flex-c-m trans-04 p-lr-25">
                             My Profile
                         </a>
+                        <a href={{ route('orders') }} class="flex-c-m trans-04 p-lr-25">
+                            My Orders
+                        </a>
                     @endauth
                 </div>
             </div>
