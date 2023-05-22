@@ -34,15 +34,16 @@
     <x-layout>
         <table class="order-table">
             <tr style="dis">
+                <th>Count</th>
                 <th>Toatal Price</th>
+                <th>Money received</th>
                 <th>Address</th>
                 <th>Payment method</th>
                 <th>Total Items</th>
                 <th>Date</th>
-                <th>Money received</th>
             </tr>
-            @foreach ($orders as $order)
-                <x-order-history-row :order="$order">
+            @foreach ($orders as $index => $order)
+            <x-order-history-row :order="$order" :count="$index + 1" >
 
                 </x-order-history-row>
             @endforeach
