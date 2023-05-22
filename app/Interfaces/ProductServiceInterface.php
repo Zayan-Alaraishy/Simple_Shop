@@ -8,5 +8,7 @@ interface ProductServiceInterface
     public function getProductById($id);
     public function updateProductById($id, $new_details);
     public function deleteProductById($id);
-    public function updateProductAverageRating(int $productId): void;
+    public function updateProductAverageRating(int $productId);
+
+    public function updateStockForProduct($products);
 }

@@ -10,6 +10,8 @@ interface ProductRepositoryInterface
     public function delete($id);
     public function getProducts($category, $name, $sortBy, $perPage);
 
-    public function updateAverageRating(int $productId): void;
+    public function updateAverageRating($productId) ;
+
+    public function updateStock ($productId, $quantity) ;
 
 }

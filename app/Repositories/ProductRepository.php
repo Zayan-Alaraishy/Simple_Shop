@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Models\Product;
@@ -6,6 +7,7 @@ use App\Models\Product;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -82,12 +84,22 @@ class ProductRepository implements ProductRepositoryInterface
 
         return $query->simplePaginate($perPage);
     }
-    public function updateAverageRating(int $productId): void
+    public function updateAverageRating($productId)
     {
         $product = Product::find($productId);
         $averageRating = round(Rating::where('product_id', $productId)->avg('rating'));
         $product->average_rating = $averageRating;
         $product->save();
     }
+
+    public function updateStock($productId, $quantity)
+    {
+        $product = Product::find($productId);
+
+        $product->stock -= $quantity;
+
+        $product->save();
+    }
+
 
 }
