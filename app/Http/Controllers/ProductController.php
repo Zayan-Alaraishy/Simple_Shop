@@ -11,6 +11,7 @@ use App\Services\ProductService;
 use App\Services\RatingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 
 class ProductController extends Controller
@@ -43,9 +44,15 @@ class ProductController extends Controller
         $sortBy = $request->input('sort_by');
         $perPage = $request->input('per_page');
 
-        $products = $this->productService->getProducts($category, $name, $sortBy, $perPage);
+        $cacheKey = 'products_' . $category . '_' . $name . '_' . $sortBy . '_' . $perPage;
+        $seconds = 60  ;
+        $products = Cache::remember($cacheKey, $seconds, function () use ($category, $name, $sortBy, $perPage) {
+            return $this->productService->getProducts($category, $name, $sortBy, $perPage);
+        });
 
-        $categories = Category::all();
+        $categories = Cache::remember('categories', $seconds, function () {
+            return $this->categoryService->getAllCategories();
+        });
         return view('products.index', compact('products', 'categories'));
     }
 
@@ -71,7 +78,7 @@ class ProductController extends Controller
                 ->with('status', 'Your product has been added!');
         } catch (\Exception $e) {
             return redirect(route('products.create'))
-            ->with('error', 'Failed to add the product!');
+                ->with('error', 'Failed to add the product!');
         }
     }
 
@@ -88,14 +95,12 @@ class ProductController extends Controller
 
         if ($isAdmin) {
             return view('products.admin_show')->with(['product' => $product, 'productReviews' => $productReviews]);
-
         } else {
             return view('products.customer_show')
                 ->with([
                     'product' => $product,
                     'productReviews' => $productReviews
                 ]);
-            
         }
     }
 
@@ -124,10 +129,10 @@ class ProductController extends Controller
             $this->productService->updateProductById($product->id, $request->validated());
 
             return redirect(route('products.show', $product))
-            ->with('status', 'Your product has been updated!');
+                ->with('status', 'Your product has been updated!');
         } catch (\Exception $e) {
             return redirect(route('products.edit', $product))
-            ->with('error', 'Failed to update the product!');
+                ->with('error', 'Failed to update the product!');
         }
     }
 
@@ -140,11 +145,10 @@ class ProductController extends Controller
             $this->productService->deleteProductById($product->id);
 
             return redirect(route('products.index'))
-            ->with('status', 'Your product has been deleted!');
-
+                ->with('status', 'Your product has been deleted!');
         } catch (\Exception $e) {
             return redirect(route('products.show', $product))
-            ->with('error', 'Failed to delete this product!');
+                ->with('error', 'Failed to delete this product!');
         }
     }
 }

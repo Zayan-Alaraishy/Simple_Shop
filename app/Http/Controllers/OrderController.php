@@ -35,7 +35,6 @@ class OrderController extends Controller
     {
         $orders  = $this->ordersServices->getUserOrderHistory();
 
-        // dd($orders->toArray());
         return view('orders-history', compact('orders'));
 
     }
