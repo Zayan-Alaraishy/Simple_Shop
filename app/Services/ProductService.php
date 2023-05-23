@@ -93,7 +93,7 @@ class ProductService implements ProductServiceInterface
         if (isset($filters['sort_by']) && $filters['sort_by'] === 'name') {
             $query->orderBy('name', 'asc');
         }
-        $products = $query->paginate(10);
+        $products = $query->simplePaginate(10);
 
         Cache::put($cacheKey, $products, 60);
 
