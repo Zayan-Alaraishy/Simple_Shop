@@ -14,12 +14,17 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = Config::get('permissions');
+        $permissions = [
+            'create products',
+            'edit products',
+            'delete products',
+            // Add more permissions as needed
+        ];
 
         foreach ($permissions as $name) {
             Permission::create([
                 'name' => $name,
-                'description' => '',
+                'description' => null,
             ]);
         }
     }
