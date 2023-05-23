@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Observers\UserObserver;
+use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
