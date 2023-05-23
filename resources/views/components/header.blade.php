@@ -58,6 +58,22 @@
                             data-notify="2">
                             <i class="zmdi zmdi-shopping-cart"></i>
                         </div>
+                        <div>
+                            @if (auth()->user()->can('create products'))
+                                <a href="{{ route('products.create') }}" class="cl2 hov-cl1 trans-04 p-l-22 p-r-11">Create
+                                    Product</a>
+                            @endif
+                        </div>
+
+                        <div>
+                            @role('super admin')
+                                <a href="{{ route('dashboard') }}" class="cl2 hov-cl1 trans-04 p-l-22 p-r-11">
+                                    Dashboard
+                                </a>
+                            @endrole
+                        </div>
+
+
 
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
