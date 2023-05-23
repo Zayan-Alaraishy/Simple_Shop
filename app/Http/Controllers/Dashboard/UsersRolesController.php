@@ -10,6 +10,8 @@ use App\Services\UserServices;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
+
 
 
 class UsersRolesController extends Controller
@@ -39,10 +41,13 @@ class UsersRolesController extends Controller
     }
     public function store(StoreUserWithRoleRequest $request)
     {
+        $data = $request->validated();
         try {
-            $this->userServices->createUserWithRole($request->validated());
+            $this->userServices->createUserWithRole($data);
             return redirect()->back()->with('status', 'New user successfully assigned to a role!');
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when creating new user ' . $data->usernmae . 'with role id' . $data->role . ' by user: ' . auth()->user()->username . '\n' . $e);
+
             return redirect()->back()->with('error', 'Failed to assign new user to a role!');
         }
     }
@@ -56,11 +61,16 @@ class UsersRolesController extends Controller
     public function update(UpdateAssignedUserRequest $request, User $user)
     {
 
+        $data = $request->validated();
+
         try {
-            $user = $this->userServices->updateAssignedUser($user, $request->validated());
+            $user = $this->userServices->updateAssignedUser($user, $data);
             return redirect()->back()->with(['status' => 'User data updated successfully!', 'selected_role' => $user['role']]);
 
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when updating assigned user ' . $data->usernmae . ' by user: ' . auth()->user()->username . '\n' . $e);
+
+
             return redirect()->back()->with('error', 'Failed to update this user data!');
         }
 
@@ -72,6 +82,8 @@ class UsersRolesController extends Controller
             $this->userServices->deleteUser($id);
             return back()->with('status', 'User deleted successfully!');
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when deleting assigned user with id # ' . $id . ' by user: ' . auth()->user()->username . '\n' . $e);
+
             return back()->with('error', 'Failed to delete this user!');
         }
     }

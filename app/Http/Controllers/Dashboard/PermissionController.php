@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Log;
+
 
 class PermissionController extends Controller
 {
@@ -49,12 +51,16 @@ class PermissionController extends Controller
      */
     public function store(StorePermissionRequest $request)
     {
+        $data = $request->validated();
         try {
-            $this->permissionsServices->createPermission($request->validated());
+            $this->permissionsServices->createPermission($data);
+
 
             return redirect()->back()
                 ->with('status', 'A new permission has been added!');
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when creating new permission ' . $data->name . ' by user: ' . auth()->user()->username . '\n' . $e);
+
             return redirect()->back()
                 ->with('error', 'Failed to add the permission!');
         }
@@ -83,12 +89,15 @@ class PermissionController extends Controller
      */
     public function update(UpdatePermissionRequest $request, Permission $permission)
     {
+        $data = $request->validated();
         try {
-            $this->permissionsServices->updatePermissionById($permission->id, $request->validated());
+            $this->permissionsServices->updatePermissionById($permission->id, $data);
 
             return redirect()->back()
                 ->with('status', 'The permission has been updated!');
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when updating permission ' . $permission->name . ' by user: ' . auth()->user()->username . '\n' . $e);
+
             return redirect()->back()
                 ->with('error', 'Failed to update the permission!');
         }
@@ -106,6 +115,8 @@ class PermissionController extends Controller
                 ->with('status', 'The permission has been deleted!');
 
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when permission permission ' . $permission->name . ' by user: ' . auth()->user()->username . '\n' . $e);
+
             return redirect()->back()
                 ->with('error', 'Failed to delete this permission!');
         }

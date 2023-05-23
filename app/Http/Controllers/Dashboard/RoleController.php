@@ -8,6 +8,8 @@ use App\Interfaces\PermissionsServicesInterface;
 use App\Interfaces\RolesServicesInterface;
 use App\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
+
 
 
 class RoleController extends Controller
@@ -51,6 +53,7 @@ class RoleController extends Controller
             return redirect()->back()
                 ->with('status', 'A new role has been added!');
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when creating new role ' . $data->name . ' by user: ' . auth()->user()->username . '\n' . $e);
             return redirect()->back()
                 ->with('error', 'Failed to add the role!');
         }
@@ -73,8 +76,6 @@ class RoleController extends Controller
         $permissions = $this->permissionsServices->getAllPermissions();
         $selectedPermissions = $role->permissions->pluck('id')->toArray();
 
-
-
         return view('dashboard.roles.edit', compact('role', 'permissions', 'selectedPermissions'));
     }
 
@@ -93,6 +94,8 @@ class RoleController extends Controller
             return redirect()->back()
                 ->with('status', 'The role has been updated!');
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when updating role ' . $role->name . ' by user: ' . auth()->user()->username . '\n' . $e);
+
             return redirect()->back()
                 ->with('error', 'Failed to update the role!');
         }
@@ -111,6 +114,8 @@ class RoleController extends Controller
                 ->with('status', 'The role has been deleted!');
 
         } catch (\Exception $e) {
+            Log::channel('error')->error('Error when deleting role ' . $role->name . ' by user: ' . auth()->user()->username . '\n' . $e);
+
             return redirect()->back()
                 ->with('error', 'Failed to delete this role!');
         }
