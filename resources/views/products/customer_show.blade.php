@@ -48,7 +48,7 @@
 							<div class="slick3 gallery-lb slick-initialized slick-slider slick-dotted">
 								<div class="slick-list draggable"><div class="slick-track" style="opacity: 1; width: 1083px;"><div class="item-slick3 slick-slide slick-current slick-active" data-thumb="images/product-detail-01.jpg" data-slick-index="0" aria-hidden="false" tabindex="0" role="tabpanel" id="slick-slide10" aria-describedby="slick-slide-control10" style="width: 361px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
 									<div class="wrap-pic-w pos-relative">
-                                        <x-product-image index='0' :product="$product" class="product-details-image"/>
+                                        <x-product-image index='0' :product="$product" class="product-details-image" style="object-fit : contain ; width: 142%;"/>
 
 
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('images/product-detail-01.jpg')}}" tabindex="0">
