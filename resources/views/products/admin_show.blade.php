@@ -182,7 +182,8 @@
                                     @endif
 
                                     @if (auth()->user()->can('delete products'))
-                                        <form action={{ route('products.destroy', $product) }} method="POST">
+                                        <form action={{ route('products.destroy', $product) }} method="POST"
+                                            onsubmit="return confirm('Are you sure you want to delete this product?');">
                                             @csrf
                                             @method('delete')
                                             <button type="submit"
