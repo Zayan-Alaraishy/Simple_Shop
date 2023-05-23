@@ -3,19 +3,19 @@
 namespace App\Models;
 
 use App\Models\Role;
-use App\Services\AuthServices;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\DB;
+use App\Traits\HasPermissionsTrait;
 
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait;
+
 
     /**
      * The attributes that are mass assignable.
@@ -67,6 +67,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->roles()->where('name', 'admin')->exists();
     }
 
+
+    public function hasRoleAssigned()
+    {
+        return $this->roles()->exists();
+    }
     /**
      * The roles that belong to the user.
      */

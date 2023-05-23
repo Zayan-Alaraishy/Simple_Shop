@@ -12,7 +12,9 @@ class PermissionObserver
      */
     public function created(Permission $permission): void
     {
-        Log::channel('info')->info('New Permission #' . $permission->id . ' is created by user: ' . auth()->user()->username);
+        if (auth()->check()) {
+            Log::channel('info')->info('New Permission #' . $permission->id . ' is created by user: ' . auth()->user()->username);
+        }
     }
 
     /**
