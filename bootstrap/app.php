@@ -30,12 +30,6 @@ $app = new Illuminate\Foundation\Application(
 */
 
 
-$app->detectEnvironment(function () {
-
-
-    return 'prod';
-});
-
 
 
 $app->singleton(

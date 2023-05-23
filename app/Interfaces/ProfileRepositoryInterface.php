@@ -11,6 +11,6 @@ interface ProfileRepositoryInterface
     public function updatePassword(User $user, string $password): void; // Add this method
     public function toggleAccountPrivacy(User $user): void;
     public function findUserById(int $id): User;
-    public function updateAddress(User $user, string $country, string $city, string $street): void;
+    public function updateAddress(User $user, string|null $country, string|null $city, string|null $street): void;
     
 }

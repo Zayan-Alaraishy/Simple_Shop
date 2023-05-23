@@ -38,18 +38,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $visibility = $request->input('visibility');
-        $category = $request->input('category');
-        $name = $request->input('name');
-        $sortBy = $request->input('sort_by');
-        $perPage = $request->input('per_page');
-
-        $cacheKey = 'products_' . $category . '_' . $name . '_' . $sortBy . '_' . $perPage;
+        $filters = $request->all();
+        $products = $this->productService->getProducts($filters);
         $seconds = 60  ;
-        $products = Cache::remember($cacheKey, $seconds, function () use ($category, $name, $sortBy, $perPage) {
-            return $this->productService->getProducts($category, $name, $sortBy, $perPage);
-        });
-
         $categories = Cache::remember('categories', $seconds, function () {
             return $this->categoryService->getAllCategories();
         });

@@ -15,12 +15,12 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $role = Role::create([
-            'name' => 'admin',
-            'description' => 'Admin',
+            'name' => 'super admin',
+            'description' => 'super admin',
             'is_active' => 1
         ]);
 
-        User::all()->each(function($user) use($role){
+        User::all()->each(function ($user) use ($role) {
             $user->roles()->attach($role);
         });
     }
