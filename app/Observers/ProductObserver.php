@@ -12,7 +12,9 @@ class ProductObserver
      */
     public function created(Product $product): void
     {
-        Log::channel('info')->info('New product named '. $product->name . ' is created by user: '. auth()->user()->username);
+        if (auth()->check()) {
+            Log::channel('info')->info('New product named ' . $product->name . ' is created by user: ' . auth()->user()->username);
+        }
     }
 
     /**
@@ -20,7 +22,7 @@ class ProductObserver
      */
     public function updated(Product $product): void
     {
-        Log::channel('info')->info('Product named '. $product->name . ' is updated by user: '. auth()->user()->username);
+        Log::channel('info')->info('Product named ' . $product->name . ' is updated by user: ' . auth()->user()->username);
 
     }
 
@@ -29,7 +31,7 @@ class ProductObserver
      */
     public function deleted(Product $product): void
     {
-        Log::channel('info')->info('Product named '. $product->name . ' is deleted by user: '. auth()->user()->username);
+        Log::channel('info')->info('Product named ' . $product->name . ' is deleted by user: ' . auth()->user()->username);
     }
 
     /**

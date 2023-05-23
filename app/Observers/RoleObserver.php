@@ -12,7 +12,9 @@ class RoleObserver
      */
     public function created(Role $role): void
     {
-        Log::channel('info')->info('New Role #' . $role->id . ' is created by user: ' . auth()->user()->username);
+        if (auth()->check()) {
+            Log::channel('info')->info('New Role #' . $role->id . ' is created by user: ' . auth()->user()->username);
+        }
     }
 
     /**
