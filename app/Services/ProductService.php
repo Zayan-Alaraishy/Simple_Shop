@@ -6,6 +6,8 @@ use App\Repositories\ProductRepository;
 use App\Interfaces\ProductServiceInterface;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+
 class ProductService implements ProductServiceInterface
 {
 
@@ -56,32 +58,49 @@ class ProductService implements ProductServiceInterface
         return $imagePaths;
     }
 
-    public function getProducts($category = null, $name = null, $sortBy = null, $perPage = 10)
+    public function getProducts($filters)
     {
-        $query = Product::query();
-        if (!(Auth::check() && Auth::user()->isAdmin())) {
-            $query->where('visibility', 1);
+        $query = $this->productRepository->query();
+        if (!Auth::user()?->isAdmin()) {
+            $query->where('visibility', true);
+        }
+        $cacheKey = 'products:' . serialize($filters);
+
+        // Check if the results are already cached
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
         }
 
-        if ($category !== null) {
-            $query->whereHas('category', function ($query) use ($category) {
-                $query->where('name', $category);
-            });
+        if (isset($filters['name'])) {
+            $name = $filters['name'];
+            $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($name) . '%']);
         }
 
-
-        if ($name !== null) {
-            $query->where('name', 'LIKE', '%' . $name . '%');
+        if (isset($filters['category'])) {
+            $category = $filters['category'];
+            $query->where('category', $category);
         }
 
-        if ($sortBy !== null) {
-            $query->orderBy($sortBy);
+        // Sorting by price (ascending)
+        if (isset($filters['sort_by']) && $filters['sort_by'] === 'unit_price') {
+            $query->orderBy('unit_price', 'asc');
         }
 
-        return $this->productRepository->getProducts($query, $perPage);
+        if (isset($filters['sort_by']) && $filters['sort_by'] === 'average_rating') {
+            $query->orderBy('average_rating', 'asc');
+        }
+
+        if (isset($filters['sort_by']) && $filters['sort_by'] === 'name') {
+            $query->orderBy('name', 'asc');
+        }
+        $products = $query->paginate(10);
+
+        Cache::put($cacheKey, $products, 60);
+
+        return $products;
     }
 
-    public function updateProductAverageRating(int $productId): void
+    public function updateProductAverageRating(int $productId)
     {
         $this->productRepository->updateAverageRating($productId);
     }

@@ -69,7 +69,7 @@ class OrdersServices implements OrdersServicesInterface
     {
         $userId = Auth::user()->id;
         $cacheKey = 'user_order_history_' . $userId;
-        $seconds = 60  ;
+        $seconds = 60;
         $orders = Cache::remember($cacheKey, $seconds, function () use ($userId) {
             if (Auth::user()->isAdmin()) {
                 return $this->ordersRepository->getAllOrders();

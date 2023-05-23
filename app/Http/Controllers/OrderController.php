@@ -7,6 +7,7 @@ use App\Interfaces\CartServiceInterface;
 use App\Interfaces\OrderItemServicesInterface;
 use App\Interfaces\OrdersServicesInterface;
 use App\Interfaces\ProductServiceInterface;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -36,7 +37,6 @@ class OrderController extends Controller
         $orders  = $this->ordersServices->getUserOrderHistory();
 
         return view('orders-history', compact('orders'));
-
     }
 
     public  function confirm_page($id)
@@ -78,6 +78,8 @@ class OrderController extends Controller
             $this->orderItemServices->store($cartItems, $order->id);
             $this->productServices->updateStockForProduct($cartItems);
             $this->cartService->clear($userId);
+            Cache::forget('user_order_history_' . $userId);
+
             DB::commit();
             return redirect()->route('confirm_order', ['id' => $order->id]);
         } catch (\Exception $e) {

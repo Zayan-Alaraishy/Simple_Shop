@@ -14,4 +14,5 @@ interface ProductRepositoryInterface
 
     public function updateStock ($productId, $quantity) ;
 
+    public function query() ;
 }
