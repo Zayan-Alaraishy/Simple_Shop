@@ -2,18 +2,20 @@
 
 namespace App\Providers;
 
-use App\Models\Permission;
 use App\Models\Role;
-use App\Models\Role_User;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
-use App\Observers\PermissionObserver;
+use App\Models\Role_User;
+use App\Events\AuditEvent;
+use App\Models\Permission;
 use App\Observers\RoleObserver;
-use App\Observers\RoleUserObserver;
 use App\Observers\UserObserver;
+use App\Listeners\LogAuditEvent;
 use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
+use App\Observers\RoleUserObserver;
+use App\Observers\PermissionObserver;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        AuditEvent::class => [
+            LogAuditEvent::class,
         ],
     ];
 

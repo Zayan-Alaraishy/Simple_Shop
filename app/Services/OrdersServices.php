@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Interfaces\OrdersRepositoryInterface;
-use App\Interfaces\OrdersServicesInterface;
-use App\Interfaces\ProductServiceInterface;
+use App\Events\AuditEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use App\Interfaces\OrdersServicesInterface;
+use App\Interfaces\ProductServiceInterface;
+use App\Interfaces\OrdersRepositoryInterface;
 
 class OrdersServices implements OrdersServicesInterface
 {
@@ -34,6 +35,8 @@ class OrdersServices implements OrdersServicesInterface
         ];
 
         $order = $this->ordersRepository->create($order);
+        
+        event(new AuditEvent($order, 'create', null));
 
         return $order;
     }

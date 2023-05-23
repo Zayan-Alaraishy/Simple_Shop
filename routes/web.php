@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\UsersRolesController;
 use App\Http\Controllers\Dashboard\PermissionController;
@@ -96,7 +96,6 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
 });
 
 
-
 Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth', 'verified'])->name('orders');
 Route::post('/orders', [OrderController::class, 'store'])->Middleware(['auth', 'verified'])->name('orders.store');
 Route::match(['GET', 'POST'], '/filter-orders', [OrderController::class, 'filter'])
@@ -125,3 +124,5 @@ Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'],
 Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'], function () {
     Route::resource('/users', UsersRolesController::class);
 });
+
+Route::resource('audit_logs', AuditLogController::class)->only(['index'])->middleware(['auth', 'super-admin']);
