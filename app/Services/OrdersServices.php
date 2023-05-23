@@ -6,6 +6,7 @@ use App\Interfaces\OrdersRepositoryInterface;
 use App\Interfaces\OrdersServicesInterface;
 use App\Interfaces\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class OrdersServices implements OrdersServicesInterface
 {
@@ -67,16 +68,18 @@ class OrdersServices implements OrdersServicesInterface
     public function getUserOrderHistory()
     {
         $userId = Auth::user()->id;
-        $orders = null;
-        if (Auth::user()->isAdmin()) {
-            $orders = $this->ordersRepository->getAllOrders();
+        $cacheKey = 'user_order_history_' . $userId;
+        $seconds = 60;
+        $orders = Cache::remember($cacheKey, $seconds, function () use ($userId) {
+            if (Auth::user()->isAdmin()) {
+                return $this->ordersRepository->getAllOrders();
+            } else {
+                return $this->ordersRepository->getUserOrders($userId);
+            }
+        });
 
-        } else {
-            $orders =  $this->ordersRepository->getUserOrders($userId);
-        }
         return $orders;
     }
-
 
     public function getAllOrderDetails($id)
     {
