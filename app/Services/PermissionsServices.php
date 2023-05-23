@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Repositories\PermissionsRepository;
+use App\Interfaces\PermissionsRepositoryInterface;
 use App\Interfaces\PermissionsServicesInterface;
 
 class PermissionsServices implements PermissionsServicesInterface
@@ -10,7 +10,7 @@ class PermissionsServices implements PermissionsServicesInterface
 
     protected $permissionsRepository;
 
-    public function __construct(PermissionsRepository $permissionsRepository)
+    public function __construct(PermissionsRepositoryInterface $permissionsRepository)
     {
         $this->permissionsRepository = $permissionsRepository;
     }

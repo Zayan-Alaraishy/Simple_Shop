@@ -18,8 +18,9 @@ class CartController extends Controller
         $userId = auth()->user()->id;
         $cartItems = $this->cartService->getUserCartItems($userId);
         $cartTotal = $this->cartService->calculateCartTotal($userId);
+        $user = auth()->user();
 
-        return view('cart', compact('cartItems', 'cartTotal'));
+        return view('cart', compact('cartItems', 'cartTotal', 'user'));
     }
 
     /**

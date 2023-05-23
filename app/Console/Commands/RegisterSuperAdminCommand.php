@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Interfaces\AuthServiceInterface;
-use App\Services\AuthServices;
+use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
+
 
 
 class RegisterSuperAdminCommand extends Command
@@ -26,14 +28,14 @@ class RegisterSuperAdminCommand extends Command
      *
      * @return void
      */
-    protected AuthServiceInterface $authServices;
+    protected UserRepositoryInterface $userRepository;
 
-    public function __construct(User $user, AuthServices $authServices)
+    public function __construct(User $user, UserRepositoryInterface $userRepository)
     {
         parent::__construct();
 
         $this->user = $user;
-        $this->authServices = $authServices;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -50,13 +52,9 @@ class RegisterSuperAdminCommand extends Command
             return;
         }
 
-        $user = $this->authServices->signup(
-            $details['email'],
-            $details['username'],
-            $details['password']
-        );
+        $user = $this->userRepository->create($details['email'], $details['username'], Hash::make($details['password']));
 
-        $this->info('A verification email has been sent to this email');
+        $user->email_verified_at = Carbon::now();
 
         $super_admin = $this->user->signAsSuperAdmin($user);
 

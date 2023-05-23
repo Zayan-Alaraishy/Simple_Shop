@@ -17,10 +17,10 @@
 
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link " href="/dashboard/users">Users</a>
+                <a class="nav-link active " href="/dashboard/users">Users</a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link active" href="/dashboard/roles">Roles</a>
+                <a class="nav-link " href="/dashboard/roles">Roles</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link " href="/dashboard/permissions">Permissions</a>
@@ -28,25 +28,25 @@
         </ul>
 
         <div class="tab-content">
-            <div id="roles" class="tab-pane fade show active">
+
+            <div id="users" class="tab-pane fade show active">
                 <div class="justify-content-left">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header">Create New Role</div>
+                            <div class="card-header">Edit User</div>
 
                             <div class="card-body">
-                                <form method="POST" action="/dashboard/roles">
+                                <form method="POST" action="{{ route('users.update', $user->id) }}">
                                     @csrf
+                                    @method('PUT')
 
                                     <div class="form-group row">
-                                        <label for="name" class="col-md-4 col-form-label text-md-right">Role
-                                            Name</label>
-
+                                        <label for="username"
+                                            class="col-md-4 col-form-label text-md-right">Username</label>
                                         <div class="col-md-6">
-                                            <input id="name" type="text"
-                                                class="form-control @error('name') is-invalid @enderror" name="name"
-                                                value="{{ old('name') }}" required autocomplete="name" autofocus>
-
+                                            <input id="username" type="text"
+                                                class="form-control @error('username') is-invalid @enderror"
+                                                name="username" value="{{ $user->username }}" required autofocus>
                                             @error('name')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -55,15 +55,14 @@
                                         </div>
                                     </div>
 
-
                                     <div class="form-group row">
-                                        <label for="description" class="col-md-4 col-form-label text-md-right">Role
-                                            Description</label>
-
+                                        <label for="email"
+                                            class="col-md-4 col-form-label text-md-right">Email</label>
                                         <div class="col-md-6">
-                                            <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description"></textarea>
-
-                                            @error('description')
+                                            <input id="email" type="email"
+                                                class="form-control @error('email') is-invalid @enderror" name="email"
+                                                value="{{ $user->email }}" required>
+                                            @error('email')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -72,32 +71,22 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="permissions"
-                                            class="col-md-4 col-form-label text-md-right">Permissions</label>
-
+                                        <label for="role" class="col-md-4 col-form-label text-md-right">Role</label>
                                         <div class="col-md-6">
-                                            <select id="permissions"
-                                                class="form-control @error('permissions') is-invalid @enderror"
-                                                name="permissions[]" multiple required>
-                                                @foreach ($permissions as $permission)
-                                                    <option value="{{ $permission->id }}">{{ $permission->name }}
+                                            <select id="role" class="form-control" name="role">
+                                                @foreach ($roles as $role)
+                                                    <option value="{{ $role->id }}"
+                                                        {{ $role->id == request()->query('selected_role') ? 'selected' : '' }}>
+                                                        {{ $role->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
-
-                                            @error('permissions')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
                                         </div>
                                     </div>
 
                                     <div class="form-group row mb-0">
-                                        <div class="col-md-8 offset-md-4">
-                                            <button type="submit" class="btn btn-primary">
-                                                Create Role
-                                            </button>
+                                        <div class="col-md-6 offset-md-4">
+                                            <button type="submit" class="btn btn-primary">Save</button>
                                         </div>
                                     </div>
                                 </form>
@@ -106,5 +95,4 @@
                     </div>
                 </div>
             </div>
-        </div>
 </x-layout>

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -15,15 +16,17 @@ class AuthServices implements AuthServiceInterface
 {
 
     protected AuthRepositoryInterface $authRepository;
-    public function __construct(AuthRepositoryInterface $authRepository)
+    protected UserRepositoryInterface $userRepository;
+    public function __construct(AuthRepositoryInterface $authRepository, UserRepositoryInterface $userRepository)
     {
         $this->authRepository = $authRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function signup($email, $username, $password)
     {
         $hashPassword = Hash::make($password);
-        $user = $this->authRepository->create($email, $username, $hashPassword);
+        $user = $this->userRepository->create($email, $username, $hashPassword);
         dispatch(new SendEmailVerificationNotification($user));
         auth()->login($user);
         return auth()->user(); // Retrieve the currently authenticated user

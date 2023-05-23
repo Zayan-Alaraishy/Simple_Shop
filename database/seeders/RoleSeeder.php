@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
 use App\Models\Role;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RoleSeeder extends Seeder
 {
@@ -14,7 +14,14 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::factory()->create(['name' => 'super admin']);
-        Role::factory()->create(['name' => 'admin']);
+        $role = Role::create([
+            'name' => 'super admin',
+            'description' => 'super admin',
+            'is_active' => 1
+        ]);
+
+        User::all()->each(function ($user) use ($role) {
+            $user->roles()->attach($role);
+        });
     }
 }

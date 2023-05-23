@@ -1,7 +1,7 @@
 <?php
 
 
-use Illuminate\Routing\Controllers\Middleware;
+use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\UsersRolesController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use Illuminate\Support\Facades\Route;
@@ -12,7 +12,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\Profile\ProfileController;
-use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,10 +87,10 @@ Route::prefix('/email')->group(function () {
 
 Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/{id}', [ProfileController::class, 'profilePage'])->name('profile');
-    Route::put('/update-email', [ProfileController::class, 'updateEmail'])->name('updateEmail');
-    Route::put('/update-username', [ProfileController::class, 'updateUsername'])->name('updateUsername');
+    Route::put('/update-profile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
     Route::post('/toggle-account-privacy', [ProfileController::class, 'toggleAccountPrivacy'])->name('toggleAccountPrivacy');
 });
+
 
 
 Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth', 'verified'])->name('orders');
@@ -106,12 +105,16 @@ Route::resource('/carts', CartController::class)->except(['create', 'show', 'edi
 Route::post('/carts/bulk', [CartController::class, 'bulkUpdate'])->middleware(['auth', 'verified'])->name('carts.bulkUpdate');
 
 
-Route::group(['middleware' => ['auth', 'super-admin']], function () {
-    Route::get('/dashboard', [UsersRolesController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [UsersRolesController::class, 'index'])->name('dashboard')->middleware(['auth', 'super-admin']);
 
-    // Add more routes for managing roles, permissions, and user-role assignments
+Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'], function () {
+    Route::resource('/permissions', PermissionController::class);
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () {
-    Route::resource('/permissions', PermissionController::class)->middleware(['auth', 'verified', 'super-admin']);
+Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'], function () {
+    Route::resource('/roles', RoleController::class);
+});
+
+Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'], function () {
+    Route::resource('/users', UsersRolesController::class);
 });

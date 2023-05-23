@@ -36,7 +36,10 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::create($details);
     }
-
+    public function query()
+    {
+        return Product::query();
+    }
     public function update($id, $new_details)
     {
         $product = Product::find($id);
@@ -58,6 +61,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getProducts($query, $perPage)
     {
+
         return $query->simplePaginate($perPage);
     }
     public function updateAverageRating($productId)
@@ -76,6 +80,4 @@ class ProductRepository implements ProductRepositoryInterface
 
         $product->save();
     }
-
-
 }

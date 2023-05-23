@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\updateEmailRequest;
-use App\Http\Requests\updateUsernameRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Interfaces\ProfileServiceInterface;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
 
 class ProfileController extends Controller
 {
@@ -21,39 +18,30 @@ class ProfileController extends Controller
 
     public function profilePage($id)
     {
-        $user = $this->profileService->findUserById($id);
+        $user = $this->profileService->findUserById((int) $id);
 
-        return view('profile.profile' , [
+        return view('profile.profile', [
             'username' => $user->username,
             'email' => $user->email,
             'isPublic' => $user->is_public,
             'userId' => $user->id,
+            'user' => $user,
         ]);
     }
 
-    public function updateEmail(updateEmailRequest $request)
+    public function updateProfile(UpdateProfileRequest $request)
     {
         $user = Auth::user();
         $this->authorize('update', $user);
+    
         try {
-            $this->profileService->updateEmail($user, $request->email);
-            return back()->with('status', 'Email updated successfully');
+            $this->profileService->updateProfile($user, $request->all());
+            return back()->with('status', 'Profile updated successfully');
         } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());
         }
     }
-
-    public function updateUsername(updateUsernameRequest $request)
-    {
-        $user = Auth::user();
-        $this->authorize('update', $user);
-        try {
-            $this->profileService->updateUsername($user, $request->username);
-            return back()->with('status', 'Username updated successfully');
-        } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
-        }
-    }
+    
 
     public function toggleAccountPrivacy()
     {

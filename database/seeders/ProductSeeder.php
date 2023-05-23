@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ProductSeeder extends Seeder
 {
@@ -13,18 +15,22 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-
-        Product::factory()->count(30)->create()->each(function ($product) {
-            $images = [
-                'https://example.com/image1.jpg',
-                'https://example.com/image2.jpg',
-                'https://example.com/image3.jpg',
-                'https://example.com/image4.jpg',
-            ];
-            shuffle($images); // Randomize the order of images
-            $product->images = array_slice($images, 0, 4); // Keep only the first 4 images
-            $product->save();
-        });
+        $json = File::get(database_path('seeders/json/products.json'));
+        $products = json_decode($json);
+        
+        foreach ($products as $product) {
+            $category = Category::firstOrCreate(['name' => $product->category]);
+            
+            Product::factory()->create([
+                'name' => $product->title,
+                'unit_price' => $product->price,
+                'description' => $product->description,
+                'average_rating' => intval($product->rating),
+                'stock' => $product->stock,
+                'images' => $product->images,
+                'category_id' => $category->id,
+            ]);
+        };
 
     }
 }
