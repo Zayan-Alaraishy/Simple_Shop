@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Models\Role;
+use App\Services\AuthServices;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
@@ -46,6 +49,15 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     ];
 
     /**
+     * Determine if the user has the super admin role.
+     *
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        return $this->roles()->where('name', 'super admin')->exists();
+    }
+    /**
      * Determine if the user has the admin role.
      *
      * @return bool
@@ -63,12 +75,25 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->belongsToMany(Role::class, 'roles_users');
     }
 
+    public function signAsSuperAdmin(User $user)
+    {
+        $superAdminRole = Role::where('name', 'super admin')->first();
+        echo $superAdminRole->id;
+        if ($superAdminRole) {
+            $user->roles()->attach($superAdminRole->id);
+        }
 
-    public function orders () {
+        return $user;
+
+    }
+
+
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
 
-    public function orderItems ()
+    public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
