@@ -37,7 +37,7 @@ class ProfileService implements ProfileServiceInterface
         return $this->profileRepository->findUserById($id);
     }
 
-    public function updateAddress(User $user, string $country, string $city, string $street): void
+    public function updateAddress(User $user, string|null $country, string|null $city, string|null $street): void
     {
         $this->profileRepository->updateAddress($user, $country, $city, $street);
     }
@@ -64,12 +64,10 @@ class ProfileService implements ProfileServiceInterface
         if (!empty($password)) {
             $this->updatePassword($user, $password);
         }
-
-        if (isset($data['country']) || isset($data['city']) || isset($data['street'])) {
-            $country = $data['country'] ?? '';
-            $city = $data['city'] ?? '';
-            $street = $data['street'] ?? '';
+        
+            $country = $data['country'] ?? NULL;
+            $city = $data['city'] ?? NULL;
+            $street = $data['street'] ?? NULL;
             $this->updateAddress($user, $country, $city, $street);
-        }
     }
 }
