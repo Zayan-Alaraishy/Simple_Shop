@@ -56,6 +56,8 @@ class RegisterSuperAdminCommand extends Command
 
         $user->email_verified_at = Carbon::now();
 
+        $user->save();
+
         $super_admin = $this->user->signAsSuperAdmin($user);
 
         $this->display($super_admin);
