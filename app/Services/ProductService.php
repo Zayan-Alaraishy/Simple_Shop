@@ -66,34 +66,32 @@ class ProductService implements ProductServiceInterface
         }
         $cacheKey = 'products:' . serialize($filters);
 
-        // Check if the results are already cached
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
 
         if (isset($filters['name'])) {
             $name = $filters['name'];
-            $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($name) . '%']);
+            $query->whereRaw('LOWER(products.name) LIKE ?', ['%' . strtolower($name) . '%']);
         }
 
         if (isset($filters['category'])) {
             $category = $filters['category'];
-            $query->where('category', $category);
+            $query->join('categories', 'products.category_id', '=', 'categories.id')
+                ->where('categories.name', $category);
         }
 
         // Sorting by price (ascending)
-        if (isset($filters['sort_by']) && $filters['sort_by'] === 'unit_price') {
-            $query->orderBy('unit_price', 'asc');
+        if (isset($filters['sort_by']) && $filters['sort_by'] == 'name') {
+            $query->orderBy('products.' . $filters['sort_by'], 'asc');
+        } else if (isset($filters['sort_by'])) {
+            $query->orderBy($filters['sort_by'], 'asc');
         }
 
-        if (isset($filters['sort_by']) && $filters['sort_by'] === 'average_rating') {
-            $query->orderBy('average_rating', 'asc');
-        }
 
-        if (isset($filters['sort_by']) && $filters['sort_by'] === 'name') {
-            $query->orderBy('name', 'asc');
-        }
-        $products = $query->paginate(10);
+
+
+        $products = $query->simplePaginate(10);
 
         Cache::put($cacheKey, $products, 60);
 
