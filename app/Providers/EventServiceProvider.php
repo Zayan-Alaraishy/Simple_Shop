@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use App\Observers\UserObserver;
 use App\Observers\ProductObserver;
@@ -31,6 +32,7 @@ class EventServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         Product::observe(ProductObserver::class);
+        Order::observe(OrderObserver::class);
     }
 
     /**
