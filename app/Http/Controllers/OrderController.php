@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\orderFilterRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Interfaces\CartServiceInterface;
 use App\Interfaces\OrderItemServicesInterface;
 use App\Interfaces\OrdersServicesInterface;
 use App\Interfaces\ProductServiceInterface;
+use App\Services\CategoryService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +20,8 @@ class OrderController extends Controller
     protected OrderItemServicesInterface $orderItemServices;
 
     protected ProductServiceInterface $productServices;
+
+    protected CategoryService  $categoryService;
     public function __construct(
         OrdersServicesInterface $ordersServices,
         CartServiceInterface $cartService,
@@ -35,7 +39,6 @@ class OrderController extends Controller
     public function index()
     {
         $orders  = $this->ordersServices->getUserOrderHistory();
-
         return view('orders-history', compact('orders'));
     }
 
@@ -47,6 +50,12 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    public function filter(orderFilterRequest $request)
+    {
+        $orders = $this->ordersServices->filterOrders($request->validated());
+        return view('orders-history', compact('orders'));
+    }
     public function store(StoreOrderRequest $request)
     {
         try {

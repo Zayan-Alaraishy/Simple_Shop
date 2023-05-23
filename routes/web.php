@@ -1,7 +1,6 @@
 <?php
 
 
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
@@ -10,7 +9,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\Profile\ProfileController;
-use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +92,9 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth','verified'])->name('orders');
 Route::post('/orders', [OrderController::class, 'store'])->Middleware(['auth','verified'])->name('orders.store');
+Route::match(['GET', 'POST'], '/filter-orders', [OrderController::class, 'filter'])
+    ->middleware(['auth', 'verified'])
+    ->name('orders.filter');
 
 Route::get('/confirm-order/{id}', [OrderController::class,'confirm_page'])->Middleware(['auth','verified'])->name('confirm_order');
 

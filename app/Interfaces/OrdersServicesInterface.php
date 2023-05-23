@@ -11,4 +11,6 @@ interface OrdersServicesInterface
     public function quantityInStock($productsToValidate);
     public function getAllOrderDetails($orderId);
     public function getUserOrderHistory();
+
+    public function filterOrders (array $filters) ;
 }

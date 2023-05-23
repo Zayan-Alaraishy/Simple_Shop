@@ -8,7 +8,10 @@
             </div>
         </a>
     </td>
-    <td class="column-2"><a href={{ route('products.show', $orderItem->id) }}>{{ $orderItem->name }}</a></td>
+    <td class="column-2">
+        <a href={{ route('products.show', $orderItem->id) }}>
+            {{ $orderItem->name }}</a>
+    </td>
     <td class="cloumn3">{{ $orderItem->unit_price }}</td>
     <td></td>
     <td class="cloumn4">{{ $orderItem->quantity }}</td>
