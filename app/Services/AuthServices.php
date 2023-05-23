@@ -28,8 +28,7 @@ class AuthServices implements AuthServiceInterface
         $hashPassword = Hash::make($password);
         $user = $this->userRepository->create($email, $username, $hashPassword);
         dispatch(new SendEmailVerificationNotification($user));
-        auth()->login($user);
-        return auth()->user(); // Retrieve the currently authenticated user
+        return auth()->login($user);
     }
 
 
