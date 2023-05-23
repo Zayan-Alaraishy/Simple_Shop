@@ -106,7 +106,5 @@
 
 </x-layout>
 <script>
-    console.log('hello');
     var products = <?php echo $products; ?>;
-    console.log(products);
 </script>
