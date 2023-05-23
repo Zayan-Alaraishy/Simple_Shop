@@ -1,6 +1,9 @@
 <?php
 
 
+use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\Dashboard\UsersRolesController;
+use App\Http\Controllers\Dashboard\PermissionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
@@ -96,10 +99,25 @@ Route::match(['GET', 'POST'], '/filter-orders', [OrderController::class, 'filter
     ->middleware(['auth', 'verified'])
     ->name('orders.filter');
 
-Route::get('/confirm-order/{id}', [OrderController::class,'confirm_page'])->Middleware(['auth','verified'])->name('confirm_order');
+Route::get('/confirm-order/{id}', [OrderController::class, 'confirm_page'])->Middleware(['auth', 'verified'])->name('confirm_order');
 
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');
 
-Route::resource('/carts', CartController::class)->except(['create','show','edit'])->middleware(['auth', 'verified']);
+Route::resource('/carts', CartController::class)->except(['create', 'show', 'edit'])->middleware(['auth', 'verified']);
 Route::post('/carts/bulk', [CartController::class, 'bulkUpdate'])->middleware(['auth', 'verified'])->name('carts.bulkUpdate');
+
+
+Route::get('/dashboard', [UsersRolesController::class, 'index'])->name('dashboard')->middleware(['auth', 'super-admin']);
+
+Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'], function () {
+    Route::resource('/permissions', PermissionController::class);
+});
+
+Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'], function () {
+    Route::resource('/roles', RoleController::class);
+});
+
+Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'], function () {
+    Route::resource('/users', UsersRolesController::class);
+});

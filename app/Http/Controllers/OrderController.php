@@ -39,10 +39,11 @@ class OrderController extends Controller
     public function index()
     {
         $orders  = $this->ordersServices->getUserOrderHistory();
+
         return view('orders-history', compact('orders'));
     }
 
-    public  function confirm_page($id)
+    public function confirm_page($id)
     {
         $orderDetails = $this->ordersServices->getAllOrderDetails($id);
         return view('order_confirmation', compact('orderDetails'));
@@ -73,7 +74,7 @@ class OrderController extends Controller
                 return back()->with('status', 'Please check your payment');
             }
 
-            $productsWithValidQuantity  = $this->ordersServices->quantityInStock($cartItems->toArray());
+            $productsWithValidQuantity = $this->ordersServices->quantityInStock($cartItems->toArray());
             if (is_array($productsWithValidQuantity)) {
                 return back()->with('out_of_stock', $productsWithValidQuantity);
             }
@@ -82,7 +83,7 @@ class OrderController extends Controller
 
             DB::beginTransaction();
 
-            $order =  $this->ordersServices->store($orderDetails, $totalPrice, $userId);
+            $order = $this->ordersServices->store($orderDetails, $totalPrice, $userId);
 
             $this->orderItemServices->store($cartItems, $order->id);
             $this->productServices->updateStockForProduct($cartItems);
