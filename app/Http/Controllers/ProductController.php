@@ -40,13 +40,7 @@ class ProductController extends Controller
     {
         $filters = $request->all();
         $products = $this->productService->getProducts($filters);
-
-        // $cacheKey = 'products_' . $category . '_' . $name . '_' . $sortBy . '_' . $perPage;
         $seconds = 60  ;
-        // $products = Cache::remember($cacheKey, $seconds, function () use ($category, $name, $sortBy, $perPage) {
-        //     return $this->productService->getProducts($category, $name, $sortBy, $perPage);
-        // });
-
         $categories = Cache::remember('categories', $seconds, function () {
             return $this->categoryService->getAllCategories();
         });
