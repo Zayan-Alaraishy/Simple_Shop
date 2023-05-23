@@ -92,7 +92,7 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
 
 
 
-Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth','verified'])->name('orders');
+Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth','verified'])->name('orders')->middleware('throttle:6,1');
 Route::post('/orders', [OrderController::class, 'store'])->Middleware(['auth','verified'])->name('orders.store');
 
 Route::get('/confirm-order/{id}', [OrderController::class,'confirm_page'])->Middleware(['auth','verified'])->name('confirm_order');
