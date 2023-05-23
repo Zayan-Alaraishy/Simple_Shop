@@ -10,4 +10,5 @@ interface PermissionsServicesInterface
     public function getPermissionById($id);
     public function updatePermissionById($id, $new_details);
     public function deletePermissionById($id);
+    public function getSelectedPermissions($role);
 }

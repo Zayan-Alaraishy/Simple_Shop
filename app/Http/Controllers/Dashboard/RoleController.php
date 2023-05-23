@@ -74,7 +74,7 @@ class RoleController extends Controller
     {
         $role = $this->rolesServices->getRoleById($id);
         $permissions = $this->permissionsServices->getAllPermissions();
-        $selectedPermissions = $role->permissions->pluck('id')->toArray();
+        $selectedPermissions = $this->permissionsServices->getSelectedPermissions($role);
 
         return view('dashboard.roles.edit', compact('role', 'permissions', 'selectedPermissions'));
     }
