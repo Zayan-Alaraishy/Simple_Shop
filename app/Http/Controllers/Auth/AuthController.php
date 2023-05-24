@@ -63,7 +63,7 @@ class AuthController extends Controller
         );
 
         if ($isLogged) {
-            return redirect()->route('home');
+            return redirect()->intended();
         } else {
             return back()->with('status', 'Invalid Login details');
         }
