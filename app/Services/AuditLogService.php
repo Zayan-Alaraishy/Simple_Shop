@@ -24,6 +24,10 @@ class AuditLogService implements AuditLogServiceInterface
 
     public function getAll(array $filters)
     {
-        return  $this->auditLogRepository->getAll($filters);
+        $user = isset($filters['user']) && !empty($filters['user'])? $filters['user']: null;
+        $model = isset($filters['model']) && !empty($filters['model'])? $filters['model']: null;
+        $event = isset($filters['event']) && !empty($filters['event'])? $filters['event']: null;
+
+        return  $this->auditLogRepository->getAll(compact('user', 'model', 'event'));
     }
 }

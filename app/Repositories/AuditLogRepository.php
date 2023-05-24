@@ -19,9 +19,9 @@ class AuditLogRepository implements AuditLogRepositoryInterface
 
     public function getAll(array $filters)
     {
-        $user = isset($filters['user']) && !empty($filters['user'])? $filters['user']: null;
-        $model = isset($filters['model']) && !empty($filters['model'])? $filters['model']: null;
-        $event = isset($filters['event']) && !empty($filters['event'])? $filters['event']: null;
+        $user = $filters['user'];
+        $model = $filters['model'];
+        $event = $filters['event'];
 
         return AuditLog::query()
             ->orderBy('created_at', 'desc')
@@ -30,5 +30,5 @@ class AuditLogRepository implements AuditLogRepositoryInterface
             ->when($event, fn($query) => $query->where('event', $event))
             ->with('user')
             ->get();
-        }
+    }
 }
