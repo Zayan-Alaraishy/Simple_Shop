@@ -1,5 +1,5 @@
 <x-layout>
-    <form class="bg0 p-t-75 p-b-85"  action={{ route('signup') }} method="Post" >
+    <form class="bg0 p-t-75 p-b-85" action={{ route('signup') }} method="Post">
         @csrf
         <div class="container">
             <div class="dis-flex flex-col flex-m bor12 p-t-15 p-b-30">
@@ -15,7 +15,8 @@
                             @enderror
                         </div>
                         <div class="bg0 m-b-12">
-                            <x-input type="text" name="username" placeholder="Username" value="{{ old('username') }}" />
+                            <x-input type="text" name="username" placeholder="Username"
+                                value="{{ old('username') }}" />
                             @error('username')
                                 <x-error>{{ $message }}</x-error>
                             @enderror
@@ -32,8 +33,13 @@
                         </div>
                     </div>
                     <x-button>Signup</x-button>
-                 </div>
+                    <x-error>
+                        @if (session('status'))
+                            {{ session('status') }}
+                        @endif
+                    </x-error>
+                </div>
             </div>
         </div>
-    </form>    
+    </form>
 </x-layout>

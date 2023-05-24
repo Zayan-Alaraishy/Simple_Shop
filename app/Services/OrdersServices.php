@@ -11,6 +11,7 @@ use App\Interfaces\OrdersRepositoryInterface;
 
 class OrdersServices implements OrdersServicesInterface
 {
+    protected $seconds = 60;
 
     protected OrdersRepositoryInterface $ordersRepository;
     protected ProductServiceInterface $productServices;
@@ -72,12 +73,11 @@ class OrdersServices implements OrdersServicesInterface
     {
         $userId = Auth::user()->id;
         $cacheKey = 'user_order_history_' . $userId;
-        $seconds = 60;
-        $orders = Cache::remember($cacheKey, $seconds, function () use ($userId) {
+        $orders = Cache::remember($cacheKey, $this->seconds, function () use ($userId) {
             if (Auth::user()->isAdmin()) {
-                return $this->ordersRepository->getAllOrders();
+                return $this->ordersRepository->getAllOrders()->get();
             } else {
-                return $this->ordersRepository->getUserOrders($userId);
+                return $this->ordersRepository->getUserOrders($userId)->get();;
             }
         });
 
@@ -88,4 +88,44 @@ class OrdersServices implements OrdersServicesInterface
     {
         return $this->ordersRepository->getOrdersDetails($id);
     }
+
+    public function filterOrders($filters)
+    {
+        $userId = Auth::user()->id;
+        $cacheKey = 'filtered_orders_' . $userId . '_' . serialize($filters);
+        $orders = Cache::remember($cacheKey, $this->seconds, function () use ($userId, $filters) {
+            $query = null;
+            if (Auth::user()->isAdmin()) {
+                $query = $this->ordersRepository->getAllOrders();
+            } else {
+                $query = $this->ordersRepository->getUserOrders($userId);
+            }
+
+            if (isset($filters['start_date']) && isset($filters['end_date'])) {
+                $startDate = $filters['start_date'];
+                $endDate = $filters['end_date'];
+                $query->whereBetween('orders.created_at', [$startDate, $endDate]);
+            } elseif (isset($filters['start_date'])) {
+                $startDate = $filters['start_date'];
+                $query->where('orders.created_at', '>=', $startDate);
+            } elseif (isset($filters['end_date'])) {
+                $endDate = $filters['end_date'];
+                $query->where('orders.created_at', '<=', $endDate);
+            }
+
+            if (isset($filters['sort_by'])) {
+                $sort_by = $filters['sort_by'];
+                if ($sort_by === 'total_price') {
+                    $query->orderBy('orders.total_price', 'asc');
+                } elseif ($sort_by === 'date_purchased') {
+                    $query->orderBy('orders.created_at', 'asc');
+                }
+            }
+
+            return $query->get();
+        });
+
+        return $orders;
+    }
+
 }

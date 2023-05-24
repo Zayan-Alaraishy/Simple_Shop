@@ -19,12 +19,11 @@ class AuthController extends Controller
     protected AuthServiceInterface $authServices;
     protected PasswordResetService $passwordResetService;
 
-    public function __construct(AuthServices $authServices , PasswordResetService $passwordResetService)
+    public function __construct(AuthServices $authServices, PasswordResetService $passwordResetService)
     {
         $this->middleware('guest');
         $this->authServices = $authServices;
         $this->passwordResetService = $passwordResetService;
-
     }
 
     public function index()
@@ -33,12 +32,23 @@ class AuthController extends Controller
     }
     public function store(StoreUserRequest $request)
     {
-        $this->authServices->signup(
-            $request->email,
-            $request->username,
-            $request->password
-        );
-        return redirect()->route('verification.notice');
+        try {
+
+            $this->authServices->signup(
+                $request->email,
+                $request->username,
+                $request->password
+            );
+            return redirect()->route('verification.notice');
+        } catch (\Exception $e) {
+            // "23505" is the code of duplicate key exception
+            if ($e->getCode() === "23505") {
+                return back()->with('status', 'Email or username is already in use ');
+            } else {
+                return back()->with('status', 'Signup operation Failed');
+
+            }
+        }
     }
 
     public function LoginForm()
@@ -69,21 +79,21 @@ class AuthController extends Controller
     {
         return view('auth.forgot-password');
     }
-    
+
     public function sendResetLinkEmail(SendResetLinkEmailRequest $request)
-    {    
+    {
         dispatch(new SendPasswordResetEmailJob($request->email));
-        
+
         return back()->with('status', 'Reset link sent successfully');
     }
-    
+
     public function showResetForm(Request $request, $token = null)
     {
         return view('auth.reset-password')->with(
             ['token' => $token, 'email' => $request->email]
         );
     }
-    
+
     public function resetPassword(ResetPasswordRequest $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -104,5 +114,4 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'Failed to reset password.']);
         }
     }
-    
 }

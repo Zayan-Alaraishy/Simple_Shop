@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Product;
 use App\Events\AuditEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
