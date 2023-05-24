@@ -16,6 +16,9 @@
                         <a href={{ route('orders') }} class="flex-c-m trans-04 p-lr-25">
                             My Orders
                         </a>
+                        <a href={{ route('audit_logs.index') }} class="flex-c-m trans-04 p-lr-25">
+                            Audit Logs
+                        </a>
                     @endauth
                 </div>
             </div>

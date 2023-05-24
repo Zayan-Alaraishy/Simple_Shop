@@ -57,6 +57,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product = $this->product->find($id);
         $product->delete();
+        return $product;
     }
 
     public function getProducts($query, $perPage)

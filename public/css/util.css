@@ -3733,3 +3733,7 @@ iframe {border: none;}
 	.product-details-slick {
 		height: 70px !important;
 	}
+
+	div#slick-slide10 {
+		width: 450px !important;
+	}
