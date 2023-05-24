@@ -45,7 +45,7 @@ class AuthController extends Controller
             if ($e->getCode() === "23505") {
                 return back()->with('status', 'Email or username is already in use ');
             } else {
-                return back()->with('status', 'Signup operation Failed');
+                return back()->with('error', 'Signup operation Failed');
 
             }
         }
@@ -65,7 +65,7 @@ class AuthController extends Controller
         if ($isLogged) {
             return redirect()->intended();
         } else {
-            return back()->with('status', 'Invalid Login details');
+            return back()->with('error', 'Invalid Login details');
         }
     }
 
