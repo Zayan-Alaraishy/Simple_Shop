@@ -28,13 +28,13 @@
                                     != json_encode($auditLog->new_values[$attribute]))
                                     @if(!($attribute == 'created_at' || $attribute == 'updated_at'))
                                         
-                                        <td class="p-0">
+                                        <td class="p-l-3 p-r-3" style="max-width: 200px">
                                             @if($auditLog->old_values != null)
-                                                <p><b>{{ $attribute }}: </b> {{ json_encode($auditLog->old_values[$attribute]) }}</p>
+                                                <p style="word-wrap:break-word"><b>{{ $attribute }}: </b> {{ json_encode($auditLog->old_values[$attribute]) }}</p>
                                             @endif
                                         </td>
-                                        <td class="p-0">
-                                            <p><b>{{ $attribute }}: </b> {{ json_encode($value) }}</p>
+                                        <td class="p-l-3 p-r-3" style="max-width: 200px">
+                                            <p style="word-wrap:break-word"><b>{{ $attribute }}: </b> {{ json_encode($value) }}</p>
                                         </td>
                                     @endif
                                 @endif
