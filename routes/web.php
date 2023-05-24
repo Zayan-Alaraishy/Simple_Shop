@@ -32,13 +32,17 @@ Route::name('home')->group(function () {
 });
 
 
-// Route::post('/product/{id}/rate', [RatingController::class, 'store'])->name('product.rate.store');
+Route::prefix('products')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/create', [ProductController::class, 'create'])->middleware('permission:create products')->name('products.create');
+    Route::post('/', [ProductController::class, 'store'])->middleware('permission:create products')->name('products.store');
+    Route::get('/{product}/edit', [ProductController::class, 'edit'])->middleware('permission:edit products')->name('products.edit');
+    Route::put('/{product}', [ProductController::class, 'update'])->middleware('permission:edit products')->name('products.update');
+    Route::delete('/{product}', [ProductController::class, 'destroy'])->middleware('permission:delete products')->name('products.destroy');
+});
 
-
-// Route::get('/products/edit', [ProductController::class, 'edit']);
-Route::resource('/products', ProductController::class)->except(['index', 'show'])->middleware(['auth', 'verified']);
 Route::get('/products', [ProductController::class, 'index'])->name("products.index");
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
 Route::post('/products/{id}/ratings', [RatingController::class, 'store'])->name('products.ratings.store')->middleware(['auth', 'verified']);
 Route::put('/products/{id}/ratings/{rating}', [RatingController::class, 'update'])->name('products.ratings.update')->middleware(['auth', 'verified']);
 Route::delete('/products/{id}/ratings/{rating}', [RatingController::class, 'destroy'])->name('products.ratings.destroy')->middleware(['auth', 'verified']);
@@ -92,8 +96,8 @@ Route::prefix('/profile')->middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth','verified'])->name('orders');
-Route::post('/orders', [OrderController::class, 'store'])->Middleware(['auth','verified'])->name('orders.store');
+Route::get('/orders', [OrderController::class, 'index'])->Middleware(['auth', 'verified'])->name('orders');
+Route::post('/orders', [OrderController::class, 'store'])->Middleware(['auth', 'verified'])->name('orders.store');
 Route::match(['GET', 'POST'], '/filter-orders', [OrderController::class, 'filter'])
     ->middleware(['auth', 'verified'])
     ->name('orders.filter');
@@ -121,4 +125,4 @@ Route::group(['middleware' => ['auth', 'super-admin'], 'prefix' => 'dashboard'],
     Route::resource('/users', UsersRolesController::class);
 });
 
-Route::resource('audit_logs', AuditLogController::class)->only(['index'])->middleware(['auth','admin']);
+Route::resource('audit_logs', AuditLogController::class)->only(['index'])->middleware(['auth', 'super-admin']);

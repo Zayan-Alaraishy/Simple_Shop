@@ -13,8 +13,6 @@
         }
     </style>
     <div class="content">
-        <h1>Dashboard</h1>
-
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active" href="/dashboard/users">Users</a>

@@ -82,9 +82,9 @@ class ProductController extends Controller
 
         $productReviews = $this->ratingService->getProductsReviews($product->id);
 
-        $isAdmin = Auth::check() && Auth::user()->isAdmin();
+        $hasRoleAssigned = Auth::check() && Auth::user()->hasRoleAssigned();
 
-        if ($isAdmin) {
+        if ($hasRoleAssigned) {
             return view('products.admin_show')->with(['product' => $product, 'productReviews' => $productReviews]);
         } else {
             return view('products.customer_show')

@@ -18,7 +18,7 @@ class isAdmin
     public function handle(Request $request, Closure $next): Response
     {
 
-        if (!Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()) {
+        if (!Auth::user()->isAdmin()) {
             return abort(403, 'Unauthorized');
         }
 
