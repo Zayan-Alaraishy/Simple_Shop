@@ -37,4 +37,9 @@ class PermissionsServices implements PermissionsServicesInterface
         return $this->permissionsRepository->getAll();
     }
 
+    public function getSelectedPermissions($role)
+    {
+        return $this->permissionsRepository->getSelectedPermissions($role)->toArray();
+
+    }
 }

@@ -59,4 +59,10 @@ class PermissionsRepository implements PermissionsRepositoryInterface
         return Permission::all();
     }
 
+    public function getSelectedPermissions($role)
+    {
+        return $role->permissions->pluck('id');
+
+    }
+
 }
