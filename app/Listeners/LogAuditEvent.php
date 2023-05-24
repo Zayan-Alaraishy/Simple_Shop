@@ -24,7 +24,6 @@ class LogAuditEvent implements ShouldQueue
      */
     public function handle(AuditEvent $event): void
     {
-        dd($event);
         $oldValues = $event->original;
         $newValues = $event->model->getAttributes();
         $user = auth()->user();
