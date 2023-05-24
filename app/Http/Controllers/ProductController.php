@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\Category;
 use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
@@ -64,7 +63,7 @@ class ProductController extends Controller
     {
         try {
             $this->productService->saveProduct($request->validated());
-
+            Cache::flush();
             return redirect(route('products.index'))
                 ->with('status', 'Your product has been added!');
         } catch (\Exception $e) {
@@ -118,9 +117,11 @@ class ProductController extends Controller
     {
         try {
             $this->productService->updateProductById($product->id, $request->validated());
-
+            Cache::flush();
             return redirect(route('products.show', $product))
                 ->with('status', 'Your product has been updated!');
+
+
         } catch (\Exception $e) {
             return redirect(route('products.edit', $product))
                 ->with('error', 'Failed to update the product!');
@@ -134,7 +135,7 @@ class ProductController extends Controller
     {
         try {
             $this->productService->deleteProductById($product->id);
-
+            Cache::flush();
             return redirect(route('products.index'))
                 ->with('status', 'Your product has been deleted!');
         } catch (\Exception $e) {

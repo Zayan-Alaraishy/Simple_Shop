@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
@@ -36,18 +35,18 @@ class CartController extends Controller
             $desiredQuantity = $validated['desired_quantity'];
 
             $this->cartService->create($userId, $productId, $desiredQuantity);
-            
+
             return redirect(route('carts.index'))
-                ->with('status', ' Product added to the cart'); 
-           
+                ->with('status', ' Product added to the cart');
+
         } catch (\Exception $e) {
-            Log::channel('error')->error('Error when adding a product #'. 
+            Log::channel('error')->error('Error when adding a product #'.
                 $productId . 'to the cart by user: ' . auth()->user()->username . '\n' . $e);
 
             return redirect(route('carts.index'))
                 ->with('error', 'Failed to add the product to the cart');
         }
-        
+
     }
 
     /**
@@ -62,15 +61,15 @@ class CartController extends Controller
             $desiredQuantity = $validated['desired_quantity'];
 
             $this->cartService->update($cart->id, $desiredQuantity);
-            
+
             return redirect(route('carts.index'))
-                ->with('status', 'Product item updated successfully'); 
+                ->with('status', 'Product item updated successfully');
 
         } catch (\Exception $e) {
             Log::channel('error')->error('Error when updating cart item # ' . $cart->id .' by user: ' . auth()->user()->username . '\n' . $e);
 
             return redirect(route('carts.index'))
-                ->with('error', 'Failed to update the product in cart'); 
+                ->with('error', 'Failed to update the product in cart');
         }
     }
 
@@ -82,13 +81,13 @@ class CartController extends Controller
             $cartItems = $request->input('cartitems');
             $this->cartService->bulkUpdate($cartItems);
             return redirect(route('carts.index'))
-                ->with('status', 'Cart updated successfully'); 
+                ->with('status', 'Cart updated successfully');
 
         } catch (\Exception $e) {
             Log::channel('error')->error('Error when updating cart by user ' . auth()->user()->username . '\n' . $e);
 
             return redirect(route('carts.index'))
-                ->with('error', 'Failed to update cart'); 
+                ->with('error', 'Failed to update cart');
         }
     }
 
@@ -101,14 +100,14 @@ class CartController extends Controller
 
         try {
            $this->cartService->delete($cart->id);
-            
+
             return redirect(route('carts.index'))
-            ->with('status', 'Product item deleted successfully'); 
+            ->with('status', 'Product item deleted successfully');
         } catch (\Exception $e) {
             Log::channel('error')->error('Error when deleting cart item #' . $cart->id . '\n' . $e);
 
             return redirect(route('carts.index'))
-                ->with('error', 'Failed to delete the product from the car'); 
+                ->with('error', 'Failed to delete the product from the car');
         }
     }
 }
