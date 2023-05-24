@@ -322,18 +322,19 @@
     
 
 
-    @if (session('status'))
+    @if (session('status') || session('error'))
         <script>
             var status = {{ Js::from(session('status')) }}
             var error = {{ Js::from(session('error')) }}
-            if (status) {
+
+            if (status != 'null') {
                 swal({
                     title: "Success",
                     text: status,
                     type: "success",
                     timer: 1500
                 });
-            } else {
+            } else if (error != 'null') {
                 swal({
                     title: "Error",
                     text: error,

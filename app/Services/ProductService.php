@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Repositories\ProductRepository;
-use App\Interfaces\ProductServiceInterface;
 use App\Models\Product;
+use App\Events\AuditEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use App\Repositories\ProductRepository;
+use App\Interfaces\ProductServiceInterface;
 
 class ProductService implements ProductServiceInterface
 {
@@ -25,7 +26,11 @@ class ProductService implements ProductServiceInterface
             $details['images'] = $imagesPath;
         }
 
-        return $this->productRepository->save($details);
+        $product = $this->productRepository->save($details);
+
+        event(new AuditEvent($product, 'create', null));
+
+        return $product;
     }
     public function getProductById($id)
     {
@@ -37,11 +42,19 @@ class ProductService implements ProductServiceInterface
             $imagesPath = $this->handleUploadedImages($new_details['images']);
             $new_details['images'] = $imagesPath;
         }
-        return $this->productRepository->update($id, $new_details);
+
+        
+        $oldProduct = $this->getProductById($id);
+        $newProduct = $this->productRepository->update($id, $new_details);
+
+        event(new AuditEvent($newProduct, 'update', $oldProduct->getOriginal()));
+
+        return $newProduct;
     }
     public function deleteProductById($id)
     {
-        $this->productRepository->delete($id);
+        $product = $this->productRepository->delete($id);
+        // event(new AuditEvent($product, 'delete', null));
     }
 
     public function handleUploadedImages($images)
