@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Interfaces\OrdersRepositoryInterface;
 use App\Models\Order;
-use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
 
 
@@ -32,21 +31,17 @@ class OrdersRepository implements OrdersRepositoryInterface
 
     public function getUserOrders($userId)
     {
-        $orders = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
+       return Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->select('orders.*', DB::raw('SUM(order_items.quantity) as total_quantity'))
             ->where('orders.user_id', $userId)
-            ->groupBy('orders.id')
-            ->get();
+            ->groupBy('orders.id') ;
 
-        return $orders;
     }
     public function getAllOrders()
     {
-        $orders = Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
+        return Order::join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->select('orders.*', DB::raw('SUM(order_items.quantity) as total_quantity'))
-            ->groupBy('orders.id')
-            ->get();
+            ->groupBy('orders.id') ;
 
-        return $orders;
     }
 }

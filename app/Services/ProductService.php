@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repositories\ProductRepository;
 use App\Interfaces\ProductServiceInterface;
-use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
